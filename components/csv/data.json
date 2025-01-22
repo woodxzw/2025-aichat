@@ -1,0 +1,430 @@
+
+{
+    "totolField":{
+        "totolFieldAmount": 20,
+        "fields":[
+            {
+                "name": "Person ID"
+            },{
+                "name": "Age"
+            },{
+                "name": "TTT"
+            },{
+                "name": "DDD"
+            },{
+                "name": "FFF"
+            },{
+                "name": "PPP"
+            },{
+                "name": "PeD"
+            },{
+                "name": "Person ID"
+            },{
+                "name": "Age"
+            },{
+                "name": "TTT"
+            },{
+                "name": "DDD"
+            },{
+                "name": "FFF"
+            },{
+                "name": "PPP"
+            },{
+                "name": "PeD"
+            }
+        ]
+    },
+    "dataTableHead":[
+        {
+            "name": "Person ID",
+            "type": "number",
+            "description": "Unique identifier",
+            "sort": 1,
+            "filter":[0,10000],
+            "min": 1,
+            "max": 10000,
+            "selEnum":"",
+            "group":[
+                {
+                    "count": 1000,
+                    "label": "1.00 - 1000.90"
+                },{
+                    "count": 2000,
+                    "label": "1000.90 - 2000.80"
+                },{
+                    "count": 3000,
+                    "label": "2000.90 - 3000.80"
+                },{
+                    "count": 5000,
+                    "label": "1.00 - 1000.90"
+                },{
+                    "count": 6000,
+                    "label": "1000.90 - 2000.80"
+                },{
+                    "count": 7000,
+                    "label": "2000.90 - 3000.80"
+                },{
+                    "count": 12000,
+                    "label": "1.00 - 1000.90"
+                },{
+                    "count": 1000,
+                    "label": "1000.90 - 2000.80"
+                },{
+                    "count": 2000,
+                    "label": "2000.90 - 3000.80"
+                },{
+                    "count": 3000,
+                    "label": "9000.90 - 10000"
+                }
+
+            ],
+            "enums":[],
+            "dataColumn":{
+                "totalCount": 10000,
+                "validCount": 7000,
+                "mismatchedCount": 1000,
+                "missingCount": 2000,
+                "maximumFinite": 10000,
+                "mostCommonValue": "Male",
+                "mostCommonValueCount": 5073,
+                "uniqueValueCount": 3,
+                "mean": 5000.5,
+                "minimumFinite": 1,
+                "staDeviation": 2886.75133,
+                "quantiles":[
+                    {
+                        "point": 0.25,
+                        "value": 2501
+                    },
+                    {
+                        "point": 0.5,
+                        "value": 5001
+                    },
+                    {
+                        "point": 0.75,
+                        "value": 7501
+                    }
+                ]
+            }
+        },{
+            "name": "Age",
+            "type": "number",
+            "sort": 1,
+            "filter":[1,100],
+            "min": 1,
+            "max": 100,
+            "description": "Unique identifier",
+            "group":[
+                {
+                    "count": 1000,
+                    "label": "1 - 10"
+                },{
+                    "count": 9000,
+                    "label": "10 - 20"
+                }
+            ],
+            "enums":[],
+            "dataColumn":{
+                "totalCount": 10000,
+                "validCount": 10000,
+                "mismatchedCount": 0,
+                "missingCount": 0,
+                "maximumFinite": 34,
+                "mostCommonValue": "Male",
+                "mostCommonValueCount": 5073,
+                "uniqueValueCount": 3,
+                "mean": 27.5,
+                "minimumFinite": 21,
+                "staDeviation": 2886.751331514372,
+                "quantiles":[
+                    {
+                        "point": 0.25,
+                        "value": 24
+                    },
+                    {
+                        "point": 0.5,
+                        "value": 27
+                    },
+                    {
+                        "point": 0.75,
+                        "value": 31
+                    }
+                ]
+            }
+        }
+        ,{
+            "name": "Boolean",
+            "type": "bool",
+            "sort": 1,
+            "filter":[],
+            "min": 0,
+            "max": 0,
+            "description": "Unique identifier",
+            "group":[],
+            "enums":[
+                {
+                    "key": "true",
+                    "value": 5073
+                },
+                {
+                    "key": "false",
+                    "value": 4460
+                }
+            ],
+            "dataColumn":{
+                "totalCount": 10000,
+                "validCount": 10000,
+                "mismatchedCount": 0,
+                "missingCount": 0,
+                "maximumFinite": 34,
+                "mostCommonValue": "Male",
+                "mostCommonValueCount": 5073,
+                "uniqueValueCount": 3,
+                "mean": 27.5,
+                "minimumFinite": 21,
+                "staDeviation": 2886.751331514372,
+                "quantiles":[]
+            }
+        },
+        {
+            "name": "Major",
+            "type": "enum",
+            "sort": 1,
+            "filter":[],
+            "min": 1,
+            "max": 100,
+            "description": "Major",
+            "group":[],
+            "enums":[
+                {
+                    "key": "Male",
+                    "value": 5073
+                },
+                {
+                    "key": "Female",
+                    "value": 4460
+                },
+                {
+                    "key": "Other",
+                    "value": 467
+                }
+            ],
+            "dataColumn":{
+                "totalCount": 10000,
+                "validCount": 10000,
+                "mismatchedCount": 0,
+                "missingCount": 0,
+                "maximumFinite": 34,
+                "mostCommonValue": "Male",
+                "mostCommonValueCount": 5073,
+                "uniqueValueCount": 3,
+                "mean": 27.5,
+                "minimumFinite": 21,
+                "staDeviation": 2886.751331514372,
+                "quantiles":[]
+            }
+        }
+    ],
+    "dataTable": {
+
+        "rows": [
+            {
+                "text": [
+                    "3123",
+                    "24",
+                    "Male",
+                    "Economics",
+                    "3.16",
+                    "5",
+                    "Entrepreneur",
+                    "73976",
+                    "No",
+                    "279"
+                ]
+            },
+            {
+                "text": [
+                    "3124",
+                    "33",
+                    "Male",
+                    "Arts",
+                    "3.08",
+                    "3",
+                    "Entrepreneur",
+                    "98044",
+                    "No",
+                    "270"
+                ]
+            },
+            {
+                "text": [
+                    "3125",
+                    "26",
+                    "Female",
+                    "Science",
+                    "3.74",
+                    "4",
+                    "Manager",
+                    "30148",
+                    "Yes",
+                    "393"
+                ]
+            },
+            {
+                "text": [
+                    "3126",
+                    "30",
+                    "Male",
+                    "Arts",
+                    "2.7",
+                    "8",
+                    "Manager",
+                    "81053",
+                    "Yes",
+                    "642"
+                ]
+            },
+            {
+                "text": [
+                    "3127",
+                    "25",
+                    "Female",
+                    "Business",
+                    "2.85",
+                    "4",
+                    "Consultant",
+                    "85006",
+                    "Yes",
+                    "611"
+                ]
+            },
+            {
+                "text": [
+                    "3128",
+                    "30",
+                    "Male",
+                    "Science",
+                    "3.2",
+                    "9",
+                    "Analyst",
+                    "40432",
+                    "No",
+                    "572"
+                ]
+            },
+            {
+                "text": [
+                    "3129",
+                    "33",
+                    "Male",
+                    "Science",
+                    "3.05",
+                    "7",
+                    "Analyst",
+                    "74264",
+                    "No",
+                    "520"
+                ]
+            },
+            {
+                "text": [
+                    "3130",
+                    "21",
+                    "Male",
+                    "Science",
+                    "3.44",
+                    "1",
+                    "Analyst",
+                    "113660",
+                    "Yes",
+                    "780"
+                ]
+            },
+            {
+                "text": [
+                    "3131",
+                    "29",
+                    "Male",
+                    "Arts",
+                    "2.08",
+                    "5",
+                    "Consultant",
+                    "34257",
+                    "No",
+                    "775"
+                ]
+            },
+            {
+                "text": [
+                    "3132",
+                    "21",
+                    "Male",
+                    "Business",
+                    "3.13",
+                    "5",
+                    "Engineer",
+                    "93011",
+                    "Yes",
+                    "392"
+                ]
+            },
+            {
+                "text": [
+                    "3133",
+                    "28",
+                    "Female",
+                    "Economics",
+                    "2.24",
+                    "4",
+                    "Engineer",
+                    "82175",
+                    "No",
+                    "516"
+                ]
+            },
+            {
+                "text": [
+                    "3134",
+                    "29",
+                    "Female",
+                    "Arts",
+                    "2.63",
+                    "5",
+                    "Engineer",
+                    "35577",
+                    "Yes",
+                    "312"
+                ]
+            },
+            {
+                "text": [
+                    "3135",
+                    "29",
+                    "Female",
+                    "Engineering",
+                    "3.32",
+                    "4",
+                    "Analyst",
+                    "42840",
+                    "No",
+                    "444"
+                ]
+            },
+            {
+                "text": [
+                    "3136",
+                    "21",
+                    "Male",
+                    "Engineering",
+                    "2.31",
+                    "1",
+                    "Entrepreneur",
+                    "110024",
+                    "Yes",
+                    "381"
+                ]
+            }
+        ]
+    }
+
+}
