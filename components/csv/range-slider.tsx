@@ -28,16 +28,34 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     onChange([startValue, endValue]);
   }, [startValue, endValue]);
 
-  const handleMouseDown = (e: MouseEvent<HTMLDivElement>, isStart: boolean) => {
+  const handleMouseDown = (e: MouseEvent<HTMLDivElement>, isStart: boolean, isTrackClick: boolean) => {
     if (disabled) return;
+
+    // 如果是点击 track，则按点击位置更新对应的滑块
+    if (isTrackClick) {
+      const newValue = getValueFromMouseEvent(e);
+      if (newValue < (startValue + endValue) / 2) {
+        setDraggingValue(newValue);
+        updateRangeValues(newValue, true); // 更新 startValue
+        setIsDraggingStart(true);
+        setIsDraggingEnd(false);
+      } else {
+        setDraggingValue(newValue);
+        updateRangeValues(newValue, false); // 更新 endValue
+        setIsDraggingStart(false);
+        setIsDraggingEnd(true);
+      }
+      return;
+    }
+
+    // 如果是点击 thumb，则重置拖动状态
     if (isStart) {
       setIsDraggingStart(true);
+      setIsDraggingEnd(false);
     } else {
+      setIsDraggingStart(false);
       setIsDraggingEnd(true);
     }
-    const newValue = getValueFromMouseEvent(e);
-    setDraggingValue(newValue);
-    updateRangeValues(newValue, isStart);
   };
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
@@ -66,11 +84,11 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
 
   const updateRangeValues = (newValue: number, isStart: boolean) => {
     if (isStart) {
-      if (newValue <= endValue) {
+      if (newValue <= endValue && newValue >= min) {
         setStartValue(newValue);
       }
     } else {
-      if (newValue >= startValue) {
+      if (newValue >= startValue && newValue <= max) {
         setEndValue(newValue);
       }
     }
@@ -87,7 +105,6 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   };
 
   const rangeValue = `${startValue},${endValue}`;
-
 
   // 计算范围区域的样式
   const rangeTrackStyle = {
@@ -119,12 +136,18 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         <div
           className={s.range_slider_thumb_start}
           style={{ left: `${((startValue - min) / (max - min)) * 100}%` }}
-          onMouseDown={(e) => handleMouseDown(e, true)}
+          onMouseDown={(e) => {
+            e.stopPropagation(); // 阻止事件冒泡
+            handleMouseDown(e, true, false); // 点击 thumb 时传递 isTrackClick 为 false
+          }}
         ></div>
         <div
           className={s.range_slider_thumb_end}
           style={{ left: `${((endValue - min) / (max - min)) * 100}%` }}
-          onMouseDown={(e) => handleMouseDown(e, false)}
+          onMouseDown={(e) => {
+            e.stopPropagation(); // 阻止事件冒泡
+            handleMouseDown(e, false, false); // 点击 thumb 时传递 isTrackClick 为 false
+          }}
         ></div>
       </div>
       <div className='flex justify-between items-center mt-10 flex-1'>

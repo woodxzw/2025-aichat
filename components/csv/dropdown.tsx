@@ -8,8 +8,8 @@ interface Data {
   type: 'number' | 'bool' | 'enum';
   sort?: number;
   filter?: [number, number];
-  min?: number;
-  max?: number;
+  min?: number | string;
+  max?: number | string;
   enums?: { key: string; value: number }[];
   name?: string;
 }
@@ -46,7 +46,6 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
   }, [data]);
 
   const handleRangeChange = useCallback((value: [number, number]) => {
-    console.log(value);
     setSelFilter(value);
   }, []);
 

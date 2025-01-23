@@ -3,17 +3,18 @@ import { FileIcon, LoaderIcon, MessageIcon, PencilEditIcon } from '../icons';
 import s from './document-csv.module.css';
 import ChartBar from './chart-bar';
 import ChartPie from './chart-pie';
+import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
 
 // 定义 dataTableHead 的类型
 interface DataTableHeadItem {
   name: string;
   description: string;
-  type: 'number' | 'enum' | 'bool';
+  type: 'number' | 'enum' | 'bool' | 'date';
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: DataColumn;
-  min?: number;
-  max?: number;
+  min?: number | string;
+  max?: number | string;
 }
 
 // 定义 dataColumn 的类型
@@ -194,7 +195,10 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
           return (
             <div className={`flex flex-col w-full pb-3 mb-3 ${s.c_colunm_item_wrap}`} key={index}>
               <div className="font-bold text-lg flex items-center">
-                <div className='mr-2'>#</div>
+                {item?.type === 'number' && <span className='mr-2'>#</span>}
+                {item?.type === 'date' && <CalendarIcon className='mr-2' />}
+                {item?.type === 'bool' && <CheckIcon className='mr-2' />}
+                {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
                 <div>{item?.name}</div>
               </div>
               <div className="mt-1">

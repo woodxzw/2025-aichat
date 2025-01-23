@@ -223,6 +223,44 @@
                 "staDeviation": 2886.751331514372,
                 "quantiles":[]
             }
+        },
+        {
+            "name": "Date",
+            "type": "date",
+            "sort": 1,
+            "filter":[],
+            "min": "2023-12-12",
+            "max": "2024-12-29",
+            "description": "Date",
+            "group":[],
+            "enums":[
+                {
+                    "key": "Male",
+                    "value": 5073
+                },
+                {
+                    "key": "Female",
+                    "value": 4460
+                },
+                {
+                    "key": "Other",
+                    "value": 467
+                }
+            ],
+            "dataColumn":{
+                "totalCount": 10000,
+                "validCount": 10000,
+                "mismatchedCount": 0,
+                "missingCount": 0,
+                "maximumFinite": 34,
+                "mostCommonValue": "Male",
+                "mostCommonValueCount": 5073,
+                "uniqueValueCount": 3,
+                "mean": 27.5,
+                "minimumFinite": 21,
+                "staDeviation": 2886.751331514372,
+                "quantiles":[]
+            }
         }
     ],
     "dataTable": {

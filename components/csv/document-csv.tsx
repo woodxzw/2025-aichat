@@ -8,7 +8,7 @@ import Detail from './detail';
 import Compact from './compact';
 import s from './document-csv.module.css';
 import Column from './column';
-import { getCsvData } from "./api";
+import { getCsvData, updateData } from "./api";
 import SelColumns from './sel-columns';
 const getActionText = (type: 'create' | 'update' | 'request-suggestions') => {
   switch (type) {
@@ -78,16 +78,37 @@ export function DocumentToolCsvResult({
   const [columnsData, setColumnsData] = useState({});
   const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
   const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const [tableData,setTableData] = useState<any>(result)
+  const [isLastData,setIsLastData] = useState(true);
   // 接收到的数据
-  const { totolField, dataTableHead } = useMemo(() => {
-    return result || {}
+  useEffect(() => {
+    setTableData(result || {})
   }, [result])
+
+  const { totolField, dataTableHead } = useMemo(() => {
+    return tableData || {}
+  }, [tableData])
+
+  useEffect(()=>{
+    let timer = null;
+    if(!isLastData && !timer){
+      timer = setInterval(()=>{
+        updateData()
+      },2000)
+    }
+    if(isLastData && timer){
+      clearInterval(timer)
+    }
+    return ()=>{
+      timer && clearInterval(timer)
+    }
+  },[isLastData])
 
   // 处理触发元素的点击事件
   const handleTriggerClick = useCallback((event: React.MouseEvent, item: any) => {
     setActiveTrigger(event.currentTarget as HTMLElement);
     setColumnsData(item);
-    setIsOpen(true);
+    setIsOpen(!isOpen);
   }, []);
 
   // 关闭弹框的函数
@@ -108,7 +129,7 @@ export function DocumentToolCsvResult({
       const triggerRect = activeTrigger.getBoundingClientRect();
       if (triggerRect.top !== undefined && triggerRect.left !== undefined) {
         dropdownRef.current.style.top = `${triggerRect.bottom-10}px`;
-        dropdownRef.current.style.left = `${triggerRect.left-200}px`;
+        dropdownRef.current.style.right = `0px`;
       } else {
         console.warn('Invalid getBoundingClientRect values:', triggerRect);
       }
@@ -129,7 +150,7 @@ export function DocumentToolCsvResult({
       {/* Tab导航 */}
       <div className={`flex justify-between ${s.border_bottom_1} pl-3`}>
         <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className='flex items-center cursor-pointer relative' onClick={(event) => { handleTriggerClick(event, result) }}>
+        <div className='flex items-center cursor-pointer relative' onClick={(event) => { handleTriggerClick(event, tableData) }}>
           <div className="mr-3">{dataTableHead?.length} of {totolField?.totolFieldAmount} colums</div>
           <ChevronDownIcon />
           
@@ -140,15 +161,15 @@ export function DocumentToolCsvResult({
       {/* 表格数据展示 */}
       <div className="tab-content">
         {activeTab === 'Detail' && (
-          <Detail result={result} />
+          <Detail result={tableData} setResult={setTableData} />
         )}
 
         {activeTab === 'Compact' && (
-          <Compact result={result} />
+          <Compact result={tableData} setResult={setTableData} />
         )}
 
         {activeTab === 'Column' && (
-          <Column result={result} />
+          <Column result={tableData} />
         )}
       </div>
       {isOpen && (

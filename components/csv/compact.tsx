@@ -1,19 +1,19 @@
 import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect } from 'react';
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
 import s from './document-csv.module.css';
 import CustomDropdown from './dropdown';
-import { getCsvData } from './api';
-
+import { getCsvData, getMoreData } from './api';
+import ScrollableTable from './scrollable-table';
 // 定义 dataTableHead 的类型
 interface DataTableHeadItem {
   name: string;
   description: string;
-  type: 'number' | 'enum' | 'bool';
+  type: 'number' | 'enum' | 'bool' | 'date';
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: { totalCount: number };
-  min?: number;
-  max?: number;
+  min?: number | string;
+  max?: number | string;
 }
 
 // 定义 dataTable 的类型
@@ -29,9 +29,10 @@ interface Result {
 
 interface CompactProps {
   result: Result;
+  setResult: (result: Result) => void;
 }
 
-const Compact: React.FC<CompactProps> = ({ result }) => {
+const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [sortData, setSortData] = useState<DataTableHeadItem | null>(null);
   const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
@@ -78,6 +79,22 @@ const Compact: React.FC<CompactProps> = ({ result }) => {
     }
   }, [isOpen, activeTrigger]);
 
+  // 加载更多数据的函数
+  const loadData = useCallback(async (page: number, pageSize: number) => {
+    const moreData = await getMoreData({ page, pageSize });
+    setResult({
+        ...result,
+        dataTable: {
+            rows:[
+                ...result.dataTable.rows,
+                ...moreData.rows,
+            ]
+        }
+    })
+    return moreData
+
+}, []);
+
   return (
     <div className="relative">
       <div className={`w-full overflow-x-auto ${s.c_container} ${s.border_top_none}`}>
@@ -88,7 +105,10 @@ const Compact: React.FC<CompactProps> = ({ result }) => {
                 <div className="w-full">
                   <button className={s.c_t_button} onClick={(event) => handleTriggerClick(event, item)}>
                     <div className="flex items-center overflow-hidden">
-                      <span className='mr-2'>#</span>
+                    {item?.type === 'number' && <span className='mr-2'>#</span>}
+                    {item?.type === 'date' && <CalendarIcon className='mr-2' />}
+                    {item?.type === 'bool' && <CheckIcon className='mr-2' />}
+                    {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
                       <span className={s.c_h_name}>{item?.name}</span>
                     </div>
                     <div>
@@ -100,15 +120,11 @@ const Compact: React.FC<CompactProps> = ({ result }) => {
             ))}
           </tr>
         </div>
-        <div className="flex flex-col">
-          {dataTable?.rows?.map((row, index) => (
-            <tr className={s.c_tr} key={index}>
-              {row?.text?.map((cell, cellInd) => (
-                <td className={s.c_td} key={cellInd}>{cell}</td>
-              ))}
-            </tr>
-          ))}
-        </div>
+        <ScrollableTable
+                    initialData={dataTable.rows}
+                    loadData={loadData}
+                    pageSize={30}
+                />
       </div>
       {isOpen && sortData !== null && (
         <CustomDropdown

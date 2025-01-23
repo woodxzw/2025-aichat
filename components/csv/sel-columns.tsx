@@ -5,12 +5,12 @@ import s from './document-csv.module.css';
 interface DataTableHeadItem {
   name: string;
   description: string;
-  type: 'number' | 'enum' | 'bool';
+  type: 'number' | 'enum' | 'bool' | 'date';
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: { totalCount: number };
-  min?: number;
-  max?: number;
+  min?: number | string;
+  max?: number | string;
 }
 
 // 定义 totolField 的类型
