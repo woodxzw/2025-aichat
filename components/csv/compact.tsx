@@ -34,7 +34,7 @@ interface CompactProps {
 
 const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [sortData, setSortData] = useState<DataTableHeadItem | null>(null);
+  const [sortData, setSortData] = useState<any>(null);
   const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
   const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -93,7 +93,7 @@ const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
     })
     return moreData
 
-}, []);
+  }, []);
 
   return (
     <div className="relative">
@@ -120,11 +120,13 @@ const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
             ))}
           </tr>
         </div>
+        {dataTable && dataTable?.rows?.length &&
         <ScrollableTable
-                    initialData={dataTable.rows}
+                    initialData={dataTable?.rows}
                     loadData={loadData}
                     pageSize={30}
                 />
+                }
       </div>
       {isOpen && sortData !== null && (
         <CustomDropdown

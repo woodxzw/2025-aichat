@@ -13,16 +13,16 @@ interface DataTableHeadItem {
   max?: number | string;
 }
 
-// 定义 totolField 的类型
-interface TotolField {
+// 定义 totalField 的类型
+interface TotalField {
   fields: { name: string }[];
-  totolFieldAmount: number;
+  totalFieldAmount: number;
 }
 
 // 定义 data 对象的类型
 interface Data {
   dataTableHead: DataTableHeadItem[];
-  totolField: TotolField;
+  totalField: TotalField;
 }
 
 // 定义 SelColumnsProps 组件的 props 类型
@@ -52,9 +52,9 @@ const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref })
   }, [onClose, ref]);
 
   useEffect(() => {
-    const { dataTableHead, totolField } = data || {};
+    const { dataTableHead, totalField } = data || {};
     setSelColumns(dataTableHead?.map((i) => i?.name) || []);
-    setAllColumns(totolField?.fields?.map((i) => i?.name) || []);
+    setAllColumns(totalField?.fields?.map((i) => i?.name) || []);
   }, [data]);
 
   const handleSubmit = useCallback(() => {

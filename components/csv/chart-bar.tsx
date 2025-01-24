@@ -16,7 +16,7 @@ const ChartBar: React.FC<BarChartProps> = ({ data }) => {
 
   useEffect(() => {
     if (chartRef.current) {
-      const myChart = echarts.init(chartRef.current);
+      const myChart = echarts?.init(chartRef.current);
 
       const option: echarts.EChartsOption = {
         tooltip: {
@@ -76,6 +76,7 @@ const ChartBar: React.FC<BarChartProps> = ({ data }) => {
             itemStyle: {
               color: '#007BA8',
             },
+            barMinHeight: 1,
             barGap: 1, // 柱子之间的间隔为 0
             barCategoryGap: 0, // 柱子与分类之间的间隔为 0
           },

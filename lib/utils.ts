@@ -219,6 +219,5 @@ export function getMessageIdFromAnnotations(message: Message) {
   const [annotation] = message.annotations;
   if (!annotation) return message.id;
 
-  // @ts-expect-error messageIdFromServer is not defined in MessageAnnotation
   return annotation.messageIdFromServer;
 }

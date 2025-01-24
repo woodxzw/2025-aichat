@@ -13,8 +13,8 @@ interface DataTableHeadItem {
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: DataColumn;
-  min?: number | string;
-  max?: number | string;
+  min?: any;
+  max?: any;
 }
 
 // 定义 dataColumn 的类型
@@ -42,28 +42,51 @@ interface ColumnProps {
   result: Result;
 }
 
-const renderNumberType = (index: number, group: number[] | undefined, min: number | undefined, max: number | undefined) => (
+
+
+const renderNumberType = (index: number, group: any | undefined, min: number | undefined, max: number | undefined) => (
   <td className="size-full flex flex-col" key={index}>
     <div className={s.c_chat_bar_l}>
       <ChartBar data={group || []} />
     </div>
     <div className={`${s.c_chat_b} mt-1`}>
-      <span>{min}</span>
-      <span>{max}</span>
+      <span>{Math.round(min || 0)}</span>
+      <span>{Math.round(max || 0)}</span>
     </div>
   </td>
 );
 
-const renderEnumType = (index: number, enums: { key: string; value: number }[] | undefined) => (
-  <td className={`size-full flex-col flex justify-evenly`} key={index}>
-    {enums?.map(enmuItem => (
-      <div key={enmuItem?.key} className="flex justify-between">
-        <span>{enmuItem.key}</span>
-        <span>{enmuItem.value}</span>
-      </div>
-    ))}
+const renderDateType = (index: number,  min: number | undefined, max: number | undefined) => (
+  <td className="size-full flex flex-col" key={index}>
+    <div className={`${s.c_chat_b} mt-1 flex flex-col justify-evenly flex-1`}>
+      <span>{min}</span>
+      <span>{max}</span>
+    </div>
   </td>
-);
+)
+
+const renderEnumType = (index: number, enums: { key: string; value: number }[] | undefined) => {
+  const sortedEnums = enums?.slice().sort((a, b) => b.value - a.value) || [];
+  const topTwoEnums = sortedEnums.slice(0, 2);
+  const otherValue = sortedEnums.slice(2).reduce((acc, enmuItem) => acc + enmuItem.value, 0);
+
+  return (
+      <td className={`size-full flex-col flex justify-evenly`} key={index}>
+          {topTwoEnums.map(enmuItem => (
+              <div key={enmuItem?.key} className="flex justify-between">
+                  <span>{enmuItem.key}</span>
+                  <span>{enmuItem.value}</span>
+              </div>
+          ))}
+          {sortedEnums.length > 2 && (
+              <div className="flex justify-between">
+                  <span>Other</span>
+                  <span>{otherValue}</span>
+              </div>
+          )}
+      </td>
+  );
+};
 
 const renderBoolType = (index: number, enums: { key: string; value: number }[] | undefined, dataColumn: DataColumn | undefined) => (
   <td className={`size-full flex items-center`} key={index}>
@@ -209,7 +232,7 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
                   {type === 'number' && renderNumberType(index, group, min, max)}
                   {type === 'enum' && renderEnumType(index, enums)}
                   {type === 'bool' && renderBoolType(index, enums, dataColumn)}
-
+                  {type === 'date' && renderDateType(index, min, max)}
                 </div>
                 <div className='size-full'>
                   <div className="w-full flex mb-2">

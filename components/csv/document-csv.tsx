@@ -47,21 +47,12 @@ function Tabs({ tabs, activeTab, setActiveTab }: TabsProps) {
   );
 }
 
-// 表格数据接口
-interface Data {
-  personId: number;
-  age: number;
-  gender: string;
-  undergradMajor: string;
-  undergradGrade: number;
-  yearsOfWork: number;
-}
-
 interface DocumentToolCsvResultProps {
   type: 'create' | 'update' | 'request-suggestions';
   result: any;
-  block: UIBlock;
-  setBlock: (value: SetStateAction<UIBlock>) => void;
+  block?: UIBlock;
+  setBlock?: (value: SetStateAction<UIBlock>) => void;
+  args: any;
 }
 
 // 主要组件
@@ -70,12 +61,13 @@ export function DocumentToolCsvResult({
   result,
   block,
   setBlock,
+  args
 }: DocumentToolCsvResultProps) {
   const [activeTab, setActiveTab] = useState<string>('Detail');
   const tabs = ['Detail', 'Compact', 'Column'];
 
   const [isOpen, setIsOpen] = useState(false);
-  const [columnsData, setColumnsData] = useState({});
+  const [columnsData, setColumnsData] = useState<any>({});
   const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
   const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const [tableData,setTableData] = useState<any>(result)
@@ -85,7 +77,13 @@ export function DocumentToolCsvResult({
     setTableData(result || {})
   }, [result])
 
-  const { totolField, dataTableHead } = useMemo(() => {
+  const { totalField, dataTableHead } = useMemo(() => {
+    // 判断数据是否完整
+    if(tableData?.progress?.cur < tableData?.progress?.max) {
+      setIsLastData(false)
+    }else{
+      setIsLastData(true)
+    }
     return tableData || {}
   }, [tableData])
 
@@ -151,7 +149,7 @@ export function DocumentToolCsvResult({
       <div className={`flex justify-between ${s.border_bottom_1} pl-3`}>
         <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className='flex items-center cursor-pointer relative' onClick={(event) => { handleTriggerClick(event, tableData) }}>
-          <div className="mr-3">{dataTableHead?.length} of {totolField?.totolFieldAmount} colums</div>
+          <div className="mr-3">{dataTableHead?.length} of {totalField?.totalFieldAmount} colums</div>
           <ChevronDownIcon />
           
         </div>

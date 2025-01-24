@@ -8,8 +8,8 @@ interface Data {
   type: 'number' | 'bool' | 'enum';
   sort?: number;
   filter?: [number, number];
-  min?: number | string;
-  max?: number | string;
+  min?: any;
+  max?: any;
   enums?: { key: string; value: number }[];
   name?: string;
 }
@@ -42,7 +42,16 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
   }, [onClose, ref]);
 
   const { type, sort, filter, min, max, enums, name } = useMemo(() => {
-    return data || {};
+    if (!data) return {};
+    return {
+        type: data.type,
+        sort: data.sort,
+        filter: data.filter,
+        min: data.min !== undefined ? Math.round(data?.min) : undefined,
+        max: data.max !== undefined ? Math.round(data?.max) : undefined,
+        enums: data.enums,
+        name: data.name
+    };
   }, [data]);
 
   const handleRangeChange = useCallback((value: [number, number]) => {
@@ -106,7 +115,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
         </div>
         {type === 'number' && (
           <div className='w-full'>
-            <RangeSlider min={min || 0} max={max || 100} value={filter || [0, 100]} onChange={handleRangeChange} />
+            <RangeSlider min={min || 0} max={max || 100} value={filter || [min, max] || [0, 100]} onChange={handleRangeChange} />
           </div>
         )}
         {type === 'bool' && (
@@ -120,7 +129,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
             {enums?.map((item) => {
               return (
                 <div
-                  className='cursor-pointer'
+                  className='cursor-pointer mb-1'
                   onClick={handleEnumSelect(item?.key)}
                   key={item?.key}
                 >

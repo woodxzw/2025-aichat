@@ -1,7 +1,7 @@
 
 {
-    "totolField":{
-        "totolFieldAmount": 20,
+    "totalField":{
+        "totalFieldAmount": 20,
         "fields":[
             {
                 "name": "Person ID"
@@ -10,7 +10,7 @@
             },{
                 "name": "TTT"
             },{
-                "name": "DDD"
+                "name": "Date"
             },{
                 "name": "FFF"
             },{
@@ -232,7 +232,28 @@
             "min": "2023-12-12",
             "max": "2024-12-29",
             "description": "Date",
-            "group":[],
+            "group":[
+                {
+                    "count": 245,
+                    "label": "01/26/2022 - 01/26/2022"
+                },
+                {
+                    "count": 245,
+                    "label": "02/26/2022 - 03/26/2022"
+                },
+                {
+                    "count": 245,
+                    "label": "02/26/2022 - 03/26/2022"
+                },
+                {
+                    "count": 245,
+                    "label": "02/26/2022 - 03/26/2022"
+                },
+                {
+                    "count": 245,
+                    "label": "02/26/2022 - 03/26/2022"
+                }
+            ],
             "enums":[
                 {
                     "key": "Male",

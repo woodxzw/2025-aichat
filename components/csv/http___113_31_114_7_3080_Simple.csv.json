@@ -1,0 +1,600 @@
+{
+    "totalField": {
+        "totalFieldAmount": 15,
+        "fields": [
+            {
+                "name": "price"
+            },
+            {
+                "name": "cost"
+            },
+            {
+                "name": "sales"
+            },
+            {
+                "name": "profit_margin"
+            },
+            {
+                "name": "inventory"
+            },
+            {
+                "name": "discount_percentage"
+            },
+            {
+                "name": "delivery_days"
+            },
+            {
+                "name": "category"
+            },
+            {
+                "name": "material"
+            },
+            {
+                "name": "color"
+            },
+            {
+                "name": "location"
+            },
+            {
+                "name": "season"
+            },
+            {
+                "name": "store_type"
+            },
+            {
+                "name": "brand"
+            },
+            {
+                "name": "revenue"
+            }
+        ]
+    },
+    "dataTableHead": [
+        {
+            "name": "price",
+            "type": "number",
+            "index": 0,
+            "min": 218.5430535,
+            "max": 477.8214379,
+            "group": [
+                {
+                    "count": 1,
+                    "label": "218.54 - 244.47"
+                },
+                {
+                    "count": 0,
+                    "label": "244.47 - 270.40"
+                },
+                {
+                    "count": 0,
+                    "label": "270.40 - 296.33"
+                },
+                {
+                    "count": 1,
+                    "label": "296.33 - 322.25"
+                },
+                {
+                    "count": 0,
+                    "label": "322.25 - 348.18"
+                },
+                {
+                    "count": 0,
+                    "label": "348.18 - 374.11"
+                },
+                {
+                    "count": 1,
+                    "label": "374.11 - 400.04"
+                },
+                {
+                    "count": 0,
+                    "label": "400.04 - 425.97"
+                },
+                {
+                    "count": 0,
+                    "label": "425.97 - 451.89"
+                },
+                {
+                    "count": 1,
+                    "label": "451.89 - 477.82"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "cost",
+            "type": "number",
+            "index": 1,
+            "min": 181.6109316,
+            "max": 385.033827,
+            "group": [
+                {
+                    "count": 1,
+                    "label": "181.61 - 201.95"
+                },
+                {
+                    "count": 0,
+                    "label": "201.95 - 222.30"
+                },
+                {
+                    "count": 0,
+                    "label": "222.30 - 242.64"
+                },
+                {
+                    "count": 0,
+                    "label": "242.64 - 262.98"
+                },
+                {
+                    "count": 2,
+                    "label": "262.98 - 283.32"
+                },
+                {
+                    "count": 0,
+                    "label": "283.32 - 303.66"
+                },
+                {
+                    "count": 0,
+                    "label": "303.66 - 324.01"
+                },
+                {
+                    "count": 0,
+                    "label": "324.01 - 344.35"
+                },
+                {
+                    "count": 0,
+                    "label": "344.35 - 364.69"
+                },
+                {
+                    "count": 1,
+                    "label": "364.69 - 385.03"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "sales",
+            "type": "number",
+            "index": 2,
+            "min": 7,
+            "max": 48,
+            "group": [
+                {
+                    "count": 1,
+                    "label": "7.00 - 11.10"
+                },
+                {
+                    "count": 0,
+                    "label": "11.10 - 15.20"
+                },
+                {
+                    "count": 0,
+                    "label": "15.20 - 19.30"
+                },
+                {
+                    "count": 0,
+                    "label": "19.30 - 23.40"
+                },
+                {
+                    "count": 0,
+                    "label": "23.40 - 27.50"
+                },
+                {
+                    "count": 0,
+                    "label": "27.50 - 31.60"
+                },
+                {
+                    "count": 1,
+                    "label": "31.60 - 35.70"
+                },
+                {
+                    "count": 0,
+                    "label": "35.70 - 39.80"
+                },
+                {
+                    "count": 1,
+                    "label": "39.80 - 43.90"
+                },
+                {
+                    "count": 1,
+                    "label": "43.90 - 48.00"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "profit_margin",
+            "type": "number",
+            "index": 3,
+            "min": 11.75811426,
+            "max": 27.05884194,
+            "group": [
+                {
+                    "count": 1,
+                    "label": "11.76 - 13.29"
+                },
+                {
+                    "count": 0,
+                    "label": "13.29 - 14.82"
+                },
+                {
+                    "count": 0,
+                    "label": "14.82 - 16.35"
+                },
+                {
+                    "count": 1,
+                    "label": "16.35 - 17.88"
+                },
+                {
+                    "count": 0,
+                    "label": "17.88 - 19.41"
+                },
+                {
+                    "count": 1,
+                    "label": "19.41 - 20.94"
+                },
+                {
+                    "count": 0,
+                    "label": "20.94 - 22.47"
+                },
+                {
+                    "count": 0,
+                    "label": "22.47 - 24.00"
+                },
+                {
+                    "count": 0,
+                    "label": "24.00 - 25.53"
+                },
+                {
+                    "count": 1,
+                    "label": "25.53 - 27.06"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "inventory",
+            "type": "number",
+            "index": 4,
+            "min": 45,
+            "max": 192,
+            "group": [
+                {
+                    "count": 2,
+                    "label": "45.00 - 59.70"
+                },
+                {
+                    "count": 0,
+                    "label": "59.70 - 74.40"
+                },
+                {
+                    "count": 0,
+                    "label": "74.40 - 89.10"
+                },
+                {
+                    "count": 0,
+                    "label": "89.10 - 103.80"
+                },
+                {
+                    "count": 1,
+                    "label": "103.80 - 118.50"
+                },
+                {
+                    "count": 0,
+                    "label": "118.50 - 133.20"
+                },
+                {
+                    "count": 0,
+                    "label": "133.20 - 147.90"
+                },
+                {
+                    "count": 0,
+                    "label": "147.90 - 162.60"
+                },
+                {
+                    "count": 0,
+                    "label": "162.60 - 177.30"
+                },
+                {
+                    "count": 1,
+                    "label": "177.30 - 192.00"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "discount_percentage",
+            "type": "number",
+            "index": 5,
+            "min": 11.00994442,
+            "max": 27.79643342,
+            "group": [
+                {
+                    "count": 1,
+                    "label": "11.01 - 12.69"
+                },
+                {
+                    "count": 0,
+                    "label": "12.69 - 14.37"
+                },
+                {
+                    "count": 0,
+                    "label": "14.37 - 16.05"
+                },
+                {
+                    "count": 0,
+                    "label": "16.05 - 17.72"
+                },
+                {
+                    "count": 0,
+                    "label": "17.72 - 19.40"
+                },
+                {
+                    "count": 0,
+                    "label": "19.40 - 21.08"
+                },
+                {
+                    "count": 1,
+                    "label": "21.08 - 22.76"
+                },
+                {
+                    "count": 0,
+                    "label": "22.76 - 24.44"
+                },
+                {
+                    "count": 0,
+                    "label": "24.44 - 26.12"
+                },
+                {
+                    "count": 2,
+                    "label": "26.12 - 27.80"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "delivery_days",
+            "type": "number",
+            "index": 6,
+            "min": 2,
+            "max": 9,
+            "group": [
+                {
+                    "count": 2,
+                    "label": "2.00 - 2.70"
+                },
+                {
+                    "count": 0,
+                    "label": "2.70 - 3.40"
+                },
+                {
+                    "count": 0,
+                    "label": "3.40 - 4.10"
+                },
+                {
+                    "count": 0,
+                    "label": "4.10 - 4.80"
+                },
+                {
+                    "count": 0,
+                    "label": "4.80 - 5.50"
+                },
+                {
+                    "count": 1,
+                    "label": "5.50 - 6.20"
+                },
+                {
+                    "count": 0,
+                    "label": "6.20 - 6.90"
+                },
+                {
+                    "count": 0,
+                    "label": "6.90 - 7.60"
+                },
+                {
+                    "count": 0,
+                    "label": "7.60 - 8.30"
+                },
+                {
+                    "count": 1,
+                    "label": "8.30 - 9.00"
+                }
+            ],
+            "enums": []
+        },
+        {
+            "name": "category",
+            "type": "enum",
+            "index": 7,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "Bed",
+                    "value": 1
+                },
+                {
+                    "key": "Chair",
+                    "value": 1
+                },
+                {
+                    "key": "Table",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "name": "material",
+            "type": "enum",
+            "index": 8,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "Plastic",
+                    "value": 1
+                },
+                {
+                    "key": "Glass",
+                    "value": 2
+                },
+                {
+                    "key": "Metal",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "color",
+            "type": "enum",
+            "index": 9,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "Red",
+                    "value": 1
+                },
+                {
+                    "key": "Blue",
+                    "value": 1
+                },
+                {
+                    "key": "Black",
+                    "value": 1
+                },
+                {
+                    "key": "Green",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "location",
+            "type": "enum",
+            "index": 10,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "Suburban",
+                    "value": 1
+                },
+                {
+                    "key": "Rural",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "name": "season",
+            "type": "enum",
+            "index": 11,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "Spring",
+                    "value": 1
+                },
+                {
+                    "key": "Summer",
+                    "value": 2
+                },
+                {
+                    "key": "Fall",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "store_type",
+            "type": "enum",
+            "index": 12,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "Online",
+                    "value": 3
+                },
+                {
+                    "key": "Retail",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "name": "brand",
+            "type": "enum",
+            "index": 13,
+            "min": 1,
+            "max": 100,
+            "group": [],
+            "enums": [
+                {
+                    "key": "BrandA",
+                    "value": 1
+                },
+                {
+                    "key": "BrandD",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "name": "revenue",
+            "type": "number",
+            "index": 14,
+            "min": -3521.002258,
+            "max": 14285.56022,
+            "group": [
+                {
+                    "count": 1,
+                    "label": "-3521.00 - -1740.35"
+                },
+                {
+                    "count": 0,
+                    "label": "-1740.35 - 40.31"
+                },
+                {
+                    "count": 0,
+                    "label": "40.31 - 1820.97"
+                },
+                {
+                    "count": 0,
+                    "label": "1820.97 - 3601.62"
+                },
+                {
+                    "count": 1,
+                    "label": "3601.62 - 5382.28"
+                },
+                {
+                    "count": 0,
+                    "label": "5382.28 - 7162.94"
+                },
+                {
+                    "count": 0,
+                    "label": "7162.94 - 8943.59"
+                },
+                {
+                    "count": 0,
+                    "label": "8943.59 - 10724.25"
+                },
+                {
+                    "count": 1,
+                    "label": "10724.25 - 12504.90"
+                },
+                {
+                    "count": 1,
+                    "label": "12504.90 - 14285.56"
+                }
+            ],
+            "enums": []
+        }
+    ]
+}

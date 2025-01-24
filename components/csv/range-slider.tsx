@@ -24,6 +24,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const [isDraggingEnd, setIsDraggingEnd] = useState(false);
   const [draggingValue, setDraggingValue] = useState<number | null>(null);
 
+
   useEffect(() => {
     onChange([startValue, endValue]);
   }, [startValue, endValue]);

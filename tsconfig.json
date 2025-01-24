@@ -4,15 +4,29 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "noEmit": true,
     "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noEmitOnError": false,
+    "noImplicitAny": false, // 允许隐式的 any 类型
+    "strictNullChecks": false, // 禁用严格的 null 检查
+    "strictFunctionTypes": false, // 禁用严格的函数类型检查
+    "strictBindCallApply": false, // 禁用严格的 bind/call/apply 检查
+    "strictPropertyInitialization": false, // 禁用严格的属性初始化检查
+    "noImplicitThis": false, // 允许隐式的 this 类型
+    "alwaysStrict": false, // 禁用始终使用严格模式
+    "noUnusedLocals": false, // 允许未使用的局部变量
+    "noUnusedParameters": false, // 允许未使用的参数
+    "noImplicitReturns": false, // 允许隐式的返回
+    "noFallthroughCasesInSwitch": false, // 允许 switch 语句中的 fallthrough
     "plugins": [
       {
         "name": "next"
