@@ -5,25 +5,25 @@ const resData = {
 
 const getCsvData = async(params)=>{
     // TODO: csv sort & filter & enumerate
-    const response = await fetch(`${baseApi}/uploadCsvOk`, {
-        // mode: 'no-cors',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"url":"http://113.31.114.7:3080/Furniture.csv", "_t":"1730807070494"}),
-    })
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    // const response = await fetch(`${baseApi}/uploadCsvOk`, {
+    //     // mode: 'no-cors',
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({"url":"http://113.31.114.7:3080/Furniture.csv", "_t":"1730807070494"}),
+    // })
+    // if (!response.ok) {
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    // }
   
-    const dataUpload = await response.json();
-    console.log(dataUpload);
+    // const dataUpload = await response.json();
+    // console.log(dataUpload);
     
     const res = await fetch(`${baseApi}/getCsvHead`, {
         // mode: 'no-cors',
         method: 'POST',
-        body: JSON.stringify({"url":"http://113.31.114.7:3080/Furniture.csv", "_t":"1730807070494"}),
+        body: JSON.stringify({"url":"http://113.31.114.7:3080/traffic_accidents.csv", "_t":"1730807070494"}),
     });
 
     if (!res.ok) {
@@ -31,7 +31,7 @@ const getCsvData = async(params)=>{
     }
   
     const dataGetHead = await res.json();
-    console.log(dataGetHead);
+    console.log(JSON.parse(dataGetHead?.msg));
     
     
     return JSON.parse(dataGetHead?.msg);

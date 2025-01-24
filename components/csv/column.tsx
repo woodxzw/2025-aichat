@@ -43,6 +43,16 @@ interface ColumnProps {
 }
 
 
+const formatDate = (timestamp)=>{
+  const date = new Date(timestamp * 1000); // 将时间戳转换为毫秒
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1，并补零
+  const day = String(date.getDate()).padStart(2, '0'); // 补零
+
+  const formattedDate = `${year}-${month}-${day}`;
+  return formattedDate
+}
 
 const renderNumberType = (index: number, group: any | undefined, min: number | undefined, max: number | undefined) => (
   <td className="size-full flex flex-col" key={index}>
@@ -59,8 +69,8 @@ const renderNumberType = (index: number, group: any | undefined, min: number | u
 const renderDateType = (index: number,  min: number | undefined, max: number | undefined) => (
   <td className="size-full flex flex-col" key={index}>
     <div className={`${s.c_chat_b} mt-1 flex flex-col justify-evenly flex-1`}>
-      <span>{min}</span>
-      <span>{max}</span>
+      <span>{formatDate(min)}</span>
+      <span>{formatDate(max)}</span>
     </div>
   </td>
 )
@@ -188,6 +198,7 @@ const renderBoolCa = (enums: { key: string; value: number }[] | undefined, total
     }
   </>
 );
+
 
 const Column: React.FC<ColumnProps> = ({ result }) => {
   // 接收到的数据
