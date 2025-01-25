@@ -90,9 +90,10 @@ export function DocumentToolCsvResult({
   useEffect(()=>{
     let timer = null;
     if(!isLastData && !timer){
-      timer = setInterval(()=>{
-        updateData()
-      },2000)
+      timer = setInterval(async ()=>{
+        const res = await updateData()
+        setTableData(res)
+      },5000)
     }
     if(isLastData && timer){
       clearInterval(timer)

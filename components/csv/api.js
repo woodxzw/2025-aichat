@@ -78,7 +78,21 @@ const getMoreData = async(params)=>{
 }
 
 const updateData = async(params)=>{
-    console.log(`timer`);
+    const res = await fetch(`${baseApi}/getCsvHead`, {
+        // mode: 'no-cors',
+        method: 'POST',
+        body: JSON.stringify({"url":"http://113.31.114.7:3080/traffic_accidents.csv", "_t":"1730807070494"}),
+    });
+
+    if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  
+    const dataGetHead = await res.json();
+    console.log(JSON.parse(dataGetHead?.msg));
+    
+    
+    return JSON.parse(dataGetHead?.msg);
     // TODO: 首次加载数据后可能不是完整数据，需要通过timer更新
     
 }
