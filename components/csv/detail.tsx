@@ -116,8 +116,8 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
 
     return (
         <div className="relative">
-            <h2>Detail View</h2>
-            <div className={`w-full overflow-x-auto ${s.c_container}`}>
+            {/* <h2>Detail View</h2> */}
+            <div className={`w-full overflow-x-auto mt-3 ${s.c_container}`}>
                 <div className="flex flex-nowrap">
                     <tr className={s.c_tr}>
                         {dataTableHead?.map((item:DataTableHeadItem, index:number) => {
