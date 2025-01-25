@@ -56,7 +56,7 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
     }, [page, hasMore, loadData, pageSize]);
 
     return (
-        <div className="flex flex-col max-h-80 overflow-y-auto" ref={tableContainerRef}>
+        <div className="flex flex-col max-h-80 flex-nowrap" ref={tableContainerRef}>
             {dataTableRows?.map((row, index) => {
                 return (
                     <tr className={s.c_tr} key={index}>
