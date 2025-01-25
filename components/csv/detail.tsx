@@ -103,7 +103,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
     
       }, []);
 
-    const formatDate = (timestamp)=>{
+    const formatDate = (timestamp:any)=>{
         const date = new Date(timestamp * 1000); // 将时间戳转换为毫秒
 
         const year = date.getFullYear();
@@ -120,7 +120,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
             <div className={`w-full overflow-x-auto ${s.c_container}`}>
                 <div className="flex flex-nowrap">
                     <tr className={s.c_tr}>
-                        {dataTableHead?.map((item, index) => {
+                        {dataTableHead?.map((item:DataTableHeadItem, index:number) => {
                             return (
                                 <td className={s.c_td} key={index}>
                                     <div className="w-full">
@@ -145,7 +145,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                 </div>
                 <div className="flex flex-nowrap">
                     <tr className={s.c_tr}>
-                        {dataTableHead?.map((item, index) => {
+                        {dataTableHead?.map((item:any, index:number) => {
                             const { type, group, enums, dataColumn, min, max } = item || {};
                             if (type === 'number') {
                                 return (
@@ -163,6 +163,9 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                             if (type === 'date') {
                                 return (
                                     <td className={`${s.c_td}`} key={index}>
+                                        <div className={s.c_chat_bar_s}>
+                                            <ChartBar data={group || []} />
+                                        </div>
                                         <div className={`${s.c_chat_b} w-full flex justify-between`}>
                                             <span>{formatDate(min)}</span>
                                             <span>{formatDate(max)}</span>
@@ -171,16 +174,16 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                                 );
                             }
                             if (type === 'enum') {
-                                const sortedEnums = enums?.slice().sort((a, b) => b.value - a.value) || [];
+                                const sortedEnums = enums?.slice().sort((a:any, b:any) => b.value - a.value) || [];
                                 const topTwoEnums = sortedEnums.slice(0, 2);
-                                const otherValue = sortedEnums.slice(2).reduce((acc, enmuItem) => acc + enmuItem.value, 0);
+                                const otherValue = sortedEnums.slice(2).reduce((acc:any, enmuItem:any) => acc + enmuItem.value, 0);
 
                                 return (
                                     <td className={`${s.c_td} flex-col flex justify-evenly`} key={index}>
-                                        {topTwoEnums.map(enmuItem => (
+                                        {topTwoEnums.map((enmuItem:{ key: string; value: number }) => (
                                             <div key={enmuItem?.key} className="flex justify-between">
-                                                <span>{enmuItem.key}</span>
-                                                <span>{enmuItem.value}</span>
+                                                <span className="whitespace-nowrap overflow-hidden text-ellipsis">{enmuItem.key}</span>
+                                                <span className="whitespace-nowrap">{enmuItem.value}</span>
                                             </div>
                                         ))}
                                         {sortedEnums.length > 2 && (
@@ -199,7 +202,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                                             <ChartPie data={enums || []} />
                                         </div>
                                         <div className="flex-1 ml-1">
-                                            {enums?.map(enmuItem => {
+                                            {enums?.map((enmuItem:{key:string;value:number}) => {
                                                 return (
                                                     <div key={enmuItem?.key}>
                                                         <p>{enmuItem.key}</p>

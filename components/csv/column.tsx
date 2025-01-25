@@ -43,7 +43,7 @@ interface ColumnProps {
 }
 
 
-const formatDate = (timestamp)=>{
+const formatDate = (timestamp:any)=>{
   const date = new Date(timestamp * 1000); // 将时间戳转换为毫秒
 
   const year = date.getFullYear();
@@ -66,9 +66,12 @@ const renderNumberType = (index: number, group: any | undefined, min: number | u
   </td>
 );
 
-const renderDateType = (index: number,  min: number | undefined, max: number | undefined) => (
+const renderDateType = (index: number,  group: any | undefined, min: number | undefined, max: number | undefined) => (
   <td className="size-full flex flex-col" key={index}>
-    <div className={`${s.c_chat_b} mt-1 flex flex-col justify-evenly flex-1`}>
+    <div className={s.c_chat_bar_l}>
+        <ChartBar data={group || []} />
+    </div>
+    <div className={`${s.c_chat_b} mt-1`}>
       <span>{formatDate(min)}</span>
       <span>{formatDate(max)}</span>
     </div>
@@ -118,6 +121,52 @@ const renderBoolType = (index: number, enums: { key: string; value: number }[] |
 );
 
 const renderNumberCa = (mean: number | undefined, staDeviation: number | undefined, minimumFinite: number | undefined, quantiles: { value: number; point: number }[] | undefined, maximumFinite: number | undefined) => (
+  <>
+    <div className='flex justify-between mb-1 text-xs'>
+      <div className='flex-auto'>
+        <span>Mean</span>
+      </div>
+      <div className='w-20 text-right'>{mean}</div>
+      <div className={`w-12 text-right ${s.c_color_gray}`}></div>
+    </div>
+
+    <div className='flex justify-between mb-3 text-xs'>
+      <div className='flex-auto'>
+        <span>Std. Deviation</span>
+      </div>
+      <div className='w-20 text-right whitespace-break-spaces overflow-hidden text-ellipsis'>{staDeviation}</div>
+      <div className={`w-12 text-right ${s.c_color_gray}`}></div>
+    </div>
+
+    <div className='flex justify-between mb-1 text-xs'>
+      <div className='flex-auto'>
+        <span>Quantiles</span>
+      </div>
+      <div className='w-20 text-right'>{minimumFinite}</div>
+      <div className={`w-12 text-right ${s.c_color_gray}`}>Min</div>
+    </div>
+    {
+      quantiles?.map((quantil, quantilInd) => (
+        <div className='flex justify-between mb-1 text-xs' key={quantilInd}>
+          <div className='flex-auto'>
+            <span></span>
+          </div>
+          <div className='w-20 text-right'>{quantil?.value}</div>
+          <div className={`w-12 text-right ${s.c_color_gray}`}>{quantil?.point * 100}%</div>
+        </div>
+      ))
+    }
+    <div className='flex justify-between mb-1 text-xs'>
+      <div className='flex-auto'>
+        <span></span>
+      </div>
+      <div className='w-20 text-right'>{maximumFinite}</div>
+      <div className={`w-12 text-right ${s.c_color_gray}`}>Max</div>
+    </div>
+  </>
+);
+
+const renderDateCa  = (mean: number | undefined, staDeviation: number | undefined, minimumFinite: number | undefined, quantiles: { value: number; point: number }[] | undefined, maximumFinite: number | undefined) => (
   <>
     <div className='flex justify-between mb-1 text-xs'>
       <div className='flex-auto'>
@@ -243,7 +292,7 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
                   {type === 'number' && renderNumberType(index, group, min, max)}
                   {type === 'enum' && renderEnumType(index, enums)}
                   {type === 'bool' && renderBoolType(index, enums, dataColumn)}
-                  {type === 'date' && renderDateType(index, min, max)}
+                  {type === 'date' && renderDateType(index, group, min, max)}
                 </div>
                 <div className='size-full'>
                   <div className="w-full flex mb-2">
@@ -277,6 +326,7 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
                   </div>
 
                   {type === 'number' && renderNumberCa(mean, staDeviation, minimumFinite, quantiles, maximumFinite)}
+                  {type === 'date' && renderDateCa(mean, staDeviation, minimumFinite, quantiles, maximumFinite)}
                   {type === 'enum' && renderEnumCa(uniqueValueCount, mostCommonValue, totalCount, mostCommonValueCount)}
                   {type === 'bool' && renderBoolCa(enums, totalCount)}
 
