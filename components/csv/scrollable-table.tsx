@@ -56,7 +56,8 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
     }, [page, hasMore, loadData, pageSize]);
 
     return (
-        <div className="flex flex-col max-h-80 flex-nowrap" ref={tableContainerRef}>
+        <table className="flex flex-col max-h-80 flex-nowrap" ref={tableContainerRef}>
+            <tbody>
             {dataTableRows?.map((row, index) => {
                 return (
                     <tr className={s.c_tr} key={index}>
@@ -66,9 +67,10 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
                     </tr>
                 );
             })}
+            </tbody>
             {loading && <div className="text-center mt-2">Loading...</div>}
             {!hasMore && <div className="text-center mt-2">No more data</div>}
-        </div>
+        </table>
     );
 };
 

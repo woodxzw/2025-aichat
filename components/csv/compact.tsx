@@ -98,7 +98,8 @@ const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
   return (
     <div className="relative">
       <div className={`w-full overflow-x-auto ${s.c_container} ${s.border_top_none}`}>
-        <div className="flex flex-nowrap">
+        <table className="flex flex-nowrap">
+          <tbody>
           <tr className={s.c_tr}>
             {dataTableHead?.map((item, index) => (
               <td className={s.c_td} key={index}>
@@ -119,7 +120,8 @@ const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
               </td>
             ))}
           </tr>
-        </div>
+          </tbody>
+        </table>
         {dataTable && dataTable?.rows?.length &&
         <ScrollableTable
                     initialData={dataTable?.rows}

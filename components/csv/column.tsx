@@ -288,12 +288,17 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
                 {item?.description}
               </div>
               <div className={`w-full grid ${s.c_colunm_item}`}>
-                <div className="size-full">
-                  {type === 'number' && renderNumberType(index, group, min, max)}
-                  {type === 'enum' && renderEnumType(index, enums)}
-                  {type === 'bool' && renderBoolType(index, enums, dataColumn)}
-                  {type === 'date' && renderDateType(index, group, min, max)}
-                </div>
+                <table className="size-full">
+                  <tbody>
+                    <tr>
+                      {type === 'number' && renderNumberType(index, group, min, max)}
+                      {type === 'enum' && renderEnumType(index, enums)}
+                      {type === 'bool' && renderBoolType(index, enums, dataColumn)}
+                      {type === 'date' && renderDateType(index, group, min, max)}
+                    </tr>
+                  </tbody>
+                  
+                </table>
                 <div className='size-full'>
                   <div className="w-full flex mb-2">
                     <div className={`${s.progress} ${s.valid}`} style={{ width: `${Math.round(((validCount || 0) / (totalCount || 1)) * 100)}%` }}></div>

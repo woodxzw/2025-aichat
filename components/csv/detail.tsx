@@ -118,7 +118,8 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
         <div className="relative">
             {/* <h2>Detail View</h2> */}
             <div className={`w-full overflow-x-auto mt-3 ${s.c_container}`}>
-                <div className="flex flex-nowrap">
+                <table className="flex flex-nowrap">
+                    <thead>
                     <tr className={s.c_tr}>
                         {dataTableHead?.map((item:DataTableHeadItem, index:number) => {
                             return (
@@ -142,8 +143,10 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                             );
                         })}
                     </tr>
-                </div>
-                <div className="flex flex-nowrap">
+                    </thead>
+                </table>
+                <table className="flex flex-nowrap">
+                    <thead>
                     <tr className={s.c_tr}>
                         {dataTableHead?.map((item:any, index:number) => {
                             const { type, group, enums, dataColumn, min, max } = item || {};
@@ -220,7 +223,8 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                             return null; // 确保每个 case 都有返回值
                         })}
                     </tr>
-                </div>
+                    </thead>
+                </table>
                 {dataTable && dataTable?.rows?.length &&
                     <ScrollableTable
                         initialData={dataTable?.rows}
