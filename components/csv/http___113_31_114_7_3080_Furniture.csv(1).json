@@ -88,6 +88,7 @@
             "name": "price",
             "type": "number",
             "index": 0,
+            "field": "col_0_price",
             "min": 50.70429733616281,
             "max": 499.87295297875875,
             "group": [
@@ -138,6 +139,7 @@
             "name": "cost",
             "type": "number",
             "index": 1,
+            "field": "col_1_cost",
             "min": 26.505895329330087,
             "max": 447.0229108170189,
             "group": [
@@ -188,6 +190,7 @@
             "name": "sales",
             "type": "number",
             "index": 2,
+            "field": "col_2_sales",
             "min": 1,
             "max": 49,
             "group": [
@@ -238,6 +241,7 @@
             "name": "profit_margin",
             "type": "number",
             "index": 3,
+            "field": "col_3_profit_margin",
             "min": 10.01769186998245,
             "max": 49.99953460978536,
             "group": [
@@ -288,6 +292,7 @@
             "name": "inventory",
             "type": "number",
             "index": 4,
+            "field": "col_4_inventory",
             "min": 0,
             "max": 199,
             "group": [
@@ -338,6 +343,7 @@
             "name": "discount_percentage",
             "type": "number",
             "index": 5,
+            "field": "col_5_discount_percentage",
             "min": 0.0055558588632842465,
             "max": 29.99122913465493,
             "group": [
@@ -388,6 +394,7 @@
             "name": "delivery_days",
             "type": "number",
             "index": 6,
+            "field": "col_6_delivery_days",
             "min": 1,
             "max": 9,
             "group": [
@@ -438,10 +445,19 @@
             "name": "category",
             "type": "enum",
             "index": 7,
+            "field": "col_7_category",
             "min": 1,
             "max": 100,
             "group": [],
             "enums": [
+                {
+                    "key": "Bed",
+                    "value": 481
+                },
+                {
+                    "key": "Chair",
+                    "value": 497
+                },
                 {
                     "key": "Table",
                     "value": 533
@@ -453,14 +469,6 @@
                 {
                     "key": "Desk",
                     "value": 501
-                },
-                {
-                    "key": "Bed",
-                    "value": 481
-                },
-                {
-                    "key": "Chair",
-                    "value": 497
                 }
             ]
         },
@@ -468,14 +476,11 @@
             "name": "material",
             "type": "enum",
             "index": 8,
+            "field": "col_8_material",
             "min": 1,
             "max": 100,
             "group": [],
             "enums": [
-                {
-                    "key": "Glass",
-                    "value": 500
-                },
                 {
                     "key": "Metal",
                     "value": 529
@@ -491,6 +496,10 @@
                 {
                     "key": "Plastic",
                     "value": 492
+                },
+                {
+                    "key": "Glass",
+                    "value": 500
                 }
             ]
         },
@@ -498,18 +507,11 @@
             "name": "color",
             "type": "enum",
             "index": 9,
+            "field": "col_9_color",
             "min": 1,
             "max": 100,
             "group": [],
             "enums": [
-                {
-                    "key": "Blue",
-                    "value": 401
-                },
-                {
-                    "key": "Black",
-                    "value": 448
-                },
                 {
                     "key": "Green",
                     "value": 399
@@ -525,6 +527,14 @@
                 {
                     "key": "Red",
                     "value": 419
+                },
+                {
+                    "key": "Blue",
+                    "value": 401
+                },
+                {
+                    "key": "Black",
+                    "value": 448
                 }
             ]
         },
@@ -532,6 +542,7 @@
             "name": "location",
             "type": "enum",
             "index": 10,
+            "field": "col_10_location",
             "min": 1,
             "max": 100,
             "group": [],
@@ -554,10 +565,15 @@
             "name": "season",
             "type": "enum",
             "index": 11,
+            "field": "col_11_season",
             "min": 1,
             "max": 100,
             "group": [],
             "enums": [
+                {
+                    "key": "Spring",
+                    "value": 614
+                },
                 {
                     "key": "Summer",
                     "value": 584
@@ -569,10 +585,6 @@
                 {
                     "key": "Winter",
                     "value": 651
-                },
-                {
-                    "key": "Spring",
-                    "value": 614
                 }
             ]
         },
@@ -580,6 +592,7 @@
             "name": "store_type",
             "type": "enum",
             "index": 12,
+            "field": "col_12_store_type",
             "min": 1,
             "max": 100,
             "group": [],
@@ -598,14 +611,11 @@
             "name": "brand",
             "type": "enum",
             "index": 13,
+            "field": "col_13_brand",
             "min": 1,
             "max": 100,
             "group": [],
             "enums": [
-                {
-                    "key": "BrandD",
-                    "value": 618
-                },
                 {
                     "key": "BrandB",
                     "value": 588
@@ -617,6 +627,10 @@
                 {
                     "key": "BrandA",
                     "value": 650
+                },
+                {
+                    "key": "BrandD",
+                    "value": 618
                 }
             ]
         },
@@ -624,6 +638,7 @@
             "name": "revenue",
             "type": "number",
             "index": 14,
+            "field": "col_14_revenue",
             "min": -14214.56550528128,
             "max": 32922.07883216713,
             "group": [

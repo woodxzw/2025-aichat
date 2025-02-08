@@ -4,7 +4,7 @@ import ChartPie from './chart-pie';
 import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
 import s from './document-csv.module.css';
 import CustomDropdown from './dropdown';
-import { getCsvData, getMoreData } from "./api";
+import { getCsvData, getMoreData, getTabelData, pageSize } from "./api";
 import ScrollableTable from './scrollable-table';
 
 // 定义 dataTableHead 的类型
@@ -17,6 +17,11 @@ interface DataTableHeadItem {
     dataColumn?: { totalCount: number };
     min?: number;
     max?: number;
+    index?: number;
+    filter?: [number, number];
+    selEnums?: string;
+    sort?: string;
+    field?: string;
 }
 
 // 定义 dataTable 的类型
@@ -32,14 +37,18 @@ interface Result {
 
 interface DetailProps {
     result: any;
+    currentPage: number;
+    setCurrentPage: (page: number) => void;
     setResult: (result: Result) => void;
 }
 
-const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
+const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrentPage  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [sortData, setSortData] = useState<any | null>(null);
     const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
     const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+
+    const tableContainerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
     const { dataTableHead, dataTable } = useMemo(() => {
         return result || { dataTableHead: [], dataTable: { rows: [] } };
@@ -58,11 +67,90 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
         setActiveTrigger(null);
     }, []);
 
-    const handeSubmit = useCallback((params: any) => {
+
+    const getFilterObj = (updatedDataTableHead:any,pageNo:number = 0) => {
+        console.log(updatedDataTableHead);
+        // 提取 filter, selEnums, sort 不为空的元素
+        const filteredItems = updatedDataTableHead?.filter(item => item.filter || item.selEnums || item.sort);
+        // 过滤掉 type 为 date 的元素
+        const filteredItemsWithoutDate = filteredItems.filter(item => item.type !== 'date');
+        // 找到第一个 sort 字段不为空的元素
+        const sortItem = filteredItems.find(item => item.sort);
+        // 构建 filterObj
+        const filterObj = {
+            query: {
+                field_name: updatedDataTableHead.map(item => item.field), // 全量的 item.index
+                where: filteredItemsWithoutDate.map(item => ({
+                    field_name: item.field, // 要筛选的字段的 item.index
+                    field_conditions: [
+                        ...(item.filter ? [
+                            {
+                                operator: '>=',
+                                operand: item.filter[0]
+                            },
+                            {
+                                operator: '<=',
+                                operand: item.filter[1]
+                            }
+                        ] : []),
+                        ...(item.selEnums ? [
+                            {
+                                operator: '=',
+                                operand: item.selEnums
+                            }
+                        ] : [])
+                    ]
+                })),
+                orderby: sortItem ? {
+                    field_name: sortItem.field, // 要排序的字段的 item.index
+                    sort_order: sortItem.sort // 值为 asc 或 desc
+                }: {
+                    field_name:'',
+                    sort_order:'',
+                },
+                skip: pageNo * pageSize, // 分页用
+                limit: pageSize
+            }
+        };
+        return filterObj
+    }
+
+    const handeSubmit = useCallback(async (params: any) => {
         setIsOpen(false);
         setActiveTrigger(null);
-        getCsvData(params);
-    }, []);
+        console.log(params);
+        const updatedDataTableHead = dataTableHead.map((item) => {
+            if (item?.index === params.index) {
+                return {
+                    ...item,
+                    ...params
+                };
+            }
+            // 处理 sort 字段
+            if (params.sort && item.sort) {
+                return {
+                    ...item,
+                    sort: ''
+                };
+            }
+            return item;
+        });
+
+    
+    // setResult({
+    //     ...result,
+    //     dataTableHead: updatedDataTableHead
+    // });
+    setCurrentPage(0);
+    const tableData = await getTabelData(getFilterObj(updatedDataTableHead,0));
+    setResult({
+        ...result,
+        dataTableHead: updatedDataTableHead,
+        dataTable: {
+            rows: tableData.rows
+        }
+    });
+    }, [dataTableHead]);
 
     // 计算弹框的位置
     const positionDropdown = useCallback(() => {
@@ -88,8 +176,9 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
 
     // 加载更多数据的函数
 
-    const loadData = useCallback(async (page: number, pageSize: number) => {
-        const moreData = await getMoreData({ page, pageSize });
+    const loadData = useCallback(async (pageNo: number) => {
+        const moreData = await getTabelData(getFilterObj(dataTableHead,pageNo));
+        setCurrentPage(pageNo);
         setResult({
             ...result,
             dataTable: {
@@ -101,7 +190,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
         })
         return moreData
     
-      }, []);
+      }, [result]);
 
     const formatDate = (timestamp:any)=>{
         const date = new Date(timestamp * 1000); // 将时间戳转换为毫秒
@@ -115,15 +204,15 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
     }
 
     return (
-        <div className="relative">
+        <div className="relative" >
             {/* <h2>Detail View</h2> */}
-            <div className={`w-full overflow-x-auto mt-3 ${s.c_container}`}>
+            <div className={`w-full overflow-x-auto mt-3 ${s.c_container}`} ref={tableContainerRef}>
                 <table className="flex flex-nowrap">
                     <thead>
                     <tr className={s.c_tr}>
-                        {dataTableHead?.map((item:DataTableHeadItem, index:number) => {
+                        {dataTableHead?.map((item:DataTableHeadItem) => {
                             return (
-                                <td className={s.c_td} key={index}>
+                                <td className={s.c_td} key={item?.index}>
                                     <div className="w-full">
                                         <button className={s.c_t_button} onClick={(event) => handleTriggerClick(event, item)}>
                                             <div className="flex items-center overflow-hidden">
@@ -148,8 +237,8 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                 <table className="flex flex-nowrap">
                     <thead>
                     <tr className={s.c_tr}>
-                        {dataTableHead?.map((item:any, index:number) => {
-                            const { type, group, enums, dataColumn, min, max } = item || {};
+                        {dataTableHead?.map((item:any) => {
+                            const { type, group, enums, dataColumn, min, max,index } = item || {};
                             if (type === 'number') {
                                 return (
                                     <td className={s.c_td} key={index}>
@@ -229,7 +318,9 @@ const Detail: React.FC<DetailProps> = ({ result,setResult  }) => {
                     <ScrollableTable
                         initialData={dataTable?.rows}
                         loadData={loadData}
-                        pageSize={30}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        tableContainerRef={tableContainerRef}
                     />
                 }
             </div>

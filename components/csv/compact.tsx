@@ -2,7 +2,7 @@ import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect } f
 import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
 import s from './document-csv.module.css';
 import CustomDropdown from './dropdown';
-import { getCsvData, getMoreData } from './api';
+import { getCsvData, getMoreData, getTabelData, pageSize } from './api';
 import ScrollableTable from './scrollable-table';
 // 定义 dataTableHead 的类型
 interface DataTableHeadItem {
@@ -29,14 +29,18 @@ interface Result {
 
 interface CompactProps {
   result: Result;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
   setResult: (result: Result) => void;
 }
 
-const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
+const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCurrentPage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [sortData, setSortData] = useState<any>(null);
   const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
   const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+
+   const tableContainerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const { dataTableHead, dataTable } = useMemo(() => {
     return result || { dataTableHead: [], dataTable: { rows: [] } };
@@ -79,56 +83,103 @@ const Compact: React.FC<CompactProps> = ({ result, setResult }) => {
     }
   }, [isOpen, activeTrigger]);
 
-  // 加载更多数据的函数
-  const loadData = useCallback(async (page: number, pageSize: number) => {
-    const moreData = await getMoreData({ page, pageSize });
-    setResult({
-        ...result,
-        dataTable: {
-            rows:[
-                ...result.dataTable.rows,
-                ...moreData.rows,
-            ]
-        }
-    })
-    return moreData
+  const getFilterObj = (updatedDataTableHead: any, pageNo: number = 0) => {
+    console.log(updatedDataTableHead);
+    // 提取 filter, selEnums, sort 不为空的元素
+    const filteredItems = updatedDataTableHead?.filter(item => item.filter || item.selEnums || item.sort);
+    // 过滤掉 type 为 date 的元素
+    const filteredItemsWithoutDate = filteredItems.filter(item => item.type !== 'date');
+    // 找到第一个 sort 字段不为空的元素
+    const sortItem = filteredItems.find(item => item.sort);
+    // 构建 filterObj
+    const filterObj = {
+      query: {
+        field_name: updatedDataTableHead.map(item => item.field), // 全量的 item.index
+        where: filteredItemsWithoutDate.map(item => ({
+          field_name: item.field, // 要筛选的字段的 item.index
+          field_conditions: [
+            ...(item.filter ? [
+              {
+                operator: '>=',
+                operand: item.filter[0]
+              },
+              {
+                operator: '<=',
+                operand: item.filter[1]
+              }
+            ] : []),
+            ...(item.selEnums ? [
+              {
+                operator: '=',
+                operand: [item.selEnums]
+              }
+            ] : [])
+          ]
+        })),
+        orderby: sortItem ? {
+          field_name: sortItem.field, // 要排序的字段的 item.index
+          sort_order: sortItem.sort // 值为 asc 或 desc
+        } : {},
+        skip: pageNo * pageSize, // 分页用
+        limit: pageSize
+      }
+    };
+    return filterObj
+  }
 
-  }, []);
+  // 加载更多数据的函数
+  const loadData = useCallback(async (pageNo: number) => {
+         const moreData = await getTabelData(getFilterObj(dataTableHead,pageNo));
+         setCurrentPage(pageNo);
+         setResult({
+             ...result,
+             dataTable: {
+                 rows:[
+                     ...result.dataTable.rows,
+                     ...moreData.rows,
+                 ]
+             }
+         })
+         return moreData
+     
+  }, [result]);
 
   return (
     <div className="relative">
-      <div className={`w-full overflow-x-auto ${s.c_container} ${s.border_top_none}`}>
+      <div className={`w-full overflow-x-auto  ${s.c_container} ${s.border_top_none}`} ref={tableContainerRef}>
         <table className="flex flex-nowrap">
           <tbody>
-          <tr className={s.c_tr}>
-            {dataTableHead?.map((item, index) => (
-              <td className={s.c_td} key={index}>
-                <div className="w-full">
-                  <button className={s.c_t_button} onClick={(event) => handleTriggerClick(event, item)}>
-                    <div className="flex items-center overflow-hidden">
-                    {item?.type === 'number' && <span className='mr-2'>#</span>}
-                    {item?.type === 'date' && <CalendarIcon className='mr-2' />}
-                    {item?.type === 'bool' && <CheckIcon className='mr-2' />}
-                    {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
-                      <span className={s.c_h_name}>{item?.name}</span>
-                    </div>
-                    <div>
-                      <HamburgerMenuIcon />
-                    </div>
-                  </button>
-                </div>
-              </td>
-            ))}
-          </tr>
+            <tr className={s.c_tr}>
+              {dataTableHead?.map((item, index) => (
+                <td className={s.c_td} key={index}>
+                  <div className="w-full">
+                    <button className={s.c_t_button} onClick={(event) => handleTriggerClick(event, item)}>
+                      <div className="flex items-center overflow-hidden">
+                        {item?.type === 'number' && <span className='mr-2'>#</span>}
+                        {item?.type === 'date' && <CalendarIcon className='mr-2' />}
+                        {item?.type === 'bool' && <CheckIcon className='mr-2' />}
+                        {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
+                        <span className={s.c_h_name}>{item?.name}</span>
+                      </div>
+                      <div>
+                        <HamburgerMenuIcon />
+                      </div>
+                    </button>
+                  </div>
+                </td>
+              ))}
+            </tr>
           </tbody>
         </table>
         {dataTable && dataTable?.rows?.length &&
-        <ScrollableTable
-                    initialData={dataTable?.rows}
-                    loadData={loadData}
-                    pageSize={30}
-                />
-                }
+          <ScrollableTable
+          initialData={dataTable?.rows}
+          loadData={loadData}
+          currentPage={currentPage}
+          pageSize={pageSize}
+            tableContainerRef={tableContainerRef}
+        />
+        }
       </div>
       {isOpen && sortData !== null && (
         <CustomDropdown

@@ -1,32 +1,42 @@
 // scrollable-table.tsx
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { getCsvData } from "./api";
 import s from './document-csv.module.css';
 interface ScrollableTableProps {
     initialData: { text: string[] }[];
-    loadData: (page: number, pageSize: number) => Promise<{ rows: { text: string[] }[] }>;
+    loadData: (pageNo: number) => Promise<{ rows: { text: string[] }[] }>;
     pageSize: number;
+    currentPage: number;
+    tableContainerRef: React.RefObject<HTMLDivElement>;
+}
+function debounce(func: (...args: any[]) => void, wait: number) {
+    let timeout: NodeJS.Timeout | null = null;
+    return function(...args: any[]) {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => func(...args), wait);
+    };
 }
 
-const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData, pageSize }) => {
+const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData, currentPage ,pageSize,tableContainerRef }) => {
     const [dataTableRows, setDataTableRows] = useState<{ text: string[] }[]>(initialData);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
-    const [page, setPage] = useState(1);
-    const tableContainerRef = useRef<HTMLDivElement>(null);
 
-    useMemo(() => {
+    useEffect(() => {
+        console.log(initialData);
         setDataTableRows(initialData);
     }, [initialData]);
 
     // 检测滚动条是否到达底部
-    const handleScroll = useCallback(() => {
+    const handleScroll = debounce(() => {
+        
         if (!tableContainerRef.current) return;
         const { scrollTop, scrollHeight, clientHeight } = tableContainerRef.current;
         if (scrollTop + clientHeight >= scrollHeight - 10 && !loading && hasMore) {
             loadMoreData();
         }
-    }, [loading, hasMore]);
+    }, 200);
 
     useEffect(() => {
         const container = tableContainerRef.current;
@@ -42,9 +52,12 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
 
     // 加载更多数据
     const loadMoreData = useCallback(async () => {
+        if(loading) return
+        console.log(`loadMore...`);
+        
         setLoading(true);
         try {
-            const moreData = await loadData(page + 1, pageSize);
+            const moreData = await loadData(currentPage + 1);
             if (moreData.rows.length < pageSize) {
                 setHasMore(false);
             }
@@ -53,10 +66,10 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
         } finally {
             setLoading(false);
         }
-    }, [page, hasMore, loadData, pageSize]);
+    }, [currentPage, hasMore, loadData, pageSize]);
 
     return (
-        <table className="flex flex-col max-h-80 flex-nowrap" ref={tableContainerRef}>
+        <table className="flex flex-col flex-nowrap">
             <tbody>
             {dataTableRows?.map((row, index) => {
                 return (

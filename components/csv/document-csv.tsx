@@ -72,6 +72,8 @@ export function DocumentToolCsvResult({
   const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const [tableData,setTableData] = useState<any>(result)
   const [isLastData,setIsLastData] = useState(true);
+  const [currentPage,setCurrentPage] = useState<number>(0)
+
   // 接收到的数据
   useEffect(() => {
     setTableData(result || {})
@@ -79,6 +81,7 @@ export function DocumentToolCsvResult({
 
   const { totalField, dataTableHead } = useMemo(() => {
     // 判断数据是否完整
+    console.log(tableData?.progress?.cur,tableData?.progress?.max);
     if(tableData?.progress?.cur < tableData?.progress?.max) {
       setIsLastData(false)
     }else{
@@ -119,7 +122,7 @@ export function DocumentToolCsvResult({
   const handeSubmit = useCallback((params: any) => {
     setIsOpen(false);
     setActiveTrigger(null);
-    getCsvData(params);
+    // getCsvData(params);
   }, []);
 
   // 计算弹框的位置
@@ -160,11 +163,11 @@ export function DocumentToolCsvResult({
       {/* 表格数据展示 */}
       <div className="tab-content">
         {activeTab === 'Detail' && (
-          <Detail result={tableData} setResult={setTableData} />
+          <Detail result={tableData} currentPage={currentPage} setCurrentPage={setCurrentPage} setResult={setTableData} />
         )}
 
         {activeTab === 'Compact' && (
-          <Compact result={tableData} setResult={setTableData} />
+          <Compact result={tableData} currentPage={currentPage} setCurrentPage={setCurrentPage} setResult={setTableData} />
         )}
 
         {activeTab === 'Column' && (
