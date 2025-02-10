@@ -22,6 +22,11 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
     const [dataTableRows, setDataTableRows] = useState<{ text: string[] }[]>(initialData);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    
+
+    useEffect(() => {
+        currentPage === 0 && setHasMore(true);
+    }, [currentPage]);
 
     useEffect(() => {
         console.log(initialData);
@@ -69,6 +74,8 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
     }, [currentPage, hasMore, loadData, pageSize]);
 
     return (
+        <>
+        {dataTableRows?.length > 0 ?
         <table className="flex flex-col flex-nowrap">
             <tbody>
             {dataTableRows?.map((row, index) => {
@@ -81,9 +88,13 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
                 );
             })}
             </tbody>
-            {loading && <div className="text-center mt-2">Loading...</div>}
-            {!hasMore && <div className="text-center mt-2">No more data</div>}
-        </table>
+            
+        </table> :
+        <div className="text-center mt-2">No data</div>
+        }
+        {loading && <div className="text-center mt-2">Loading...</div>}
+        {!hasMore && <div className="text-center mt-2">No more data</div>}
+        </>
     );
 };
 

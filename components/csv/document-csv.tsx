@@ -122,8 +122,17 @@ export function DocumentToolCsvResult({
   const handeSubmit = useCallback((params: any) => {
     setIsOpen(false);
     setActiveTrigger(null);
+
+    relaodData(params)
     // getCsvData(params);
   }, []);
+
+  const relaodData = async (params: any) => {
+    setCurrentPage(0);
+    console.log(params);
+    // const res = await getCsvData(params)
+    // setTableData(res)
+  }
 
   // 计算弹框的位置
   const positionDropdown = useCallback(() => {

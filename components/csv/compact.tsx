@@ -2,7 +2,7 @@ import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect } f
 import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
 import s from './document-csv.module.css';
 import CustomDropdown from './dropdown';
-import { getCsvData, getMoreData, getTabelData, pageSize } from './api';
+import { getCsvData, getFilterObj, getTabelData, pageSize } from './api';
 import ScrollableTable from './scrollable-table';
 // 定义 dataTableHead 的类型
 interface DataTableHeadItem {
@@ -83,50 +83,6 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
     }
   }, [isOpen, activeTrigger]);
 
-  const getFilterObj = (updatedDataTableHead: any, pageNo: number = 0) => {
-    console.log(updatedDataTableHead);
-    // 提取 filter, selEnums, sort 不为空的元素
-    const filteredItems = updatedDataTableHead?.filter(item => item.filter || item.selEnums || item.sort);
-    // 过滤掉 type 为 date 的元素
-    const filteredItemsWithoutDate = filteredItems.filter(item => item.type !== 'date');
-    // 找到第一个 sort 字段不为空的元素
-    const sortItem = filteredItems.find(item => item.sort);
-    // 构建 filterObj
-    const filterObj = {
-      query: {
-        field_name: updatedDataTableHead.map(item => item.field), // 全量的 item.index
-        where: filteredItemsWithoutDate.map(item => ({
-          field_name: item.field, // 要筛选的字段的 item.index
-          field_conditions: [
-            ...(item.filter ? [
-              {
-                operator: '>=',
-                operand: item.filter[0]
-              },
-              {
-                operator: '<=',
-                operand: item.filter[1]
-              }
-            ] : []),
-            ...(item.selEnums ? [
-              {
-                operator: '=',
-                operand: [item.selEnums]
-              }
-            ] : [])
-          ]
-        })),
-        orderby: sortItem ? {
-          field_name: sortItem.field, // 要排序的字段的 item.index
-          sort_order: sortItem.sort // 值为 asc 或 desc
-        } : {},
-        skip: pageNo * pageSize, // 分页用
-        limit: pageSize
-      }
-    };
-    return filterObj
-  }
-
   // 加载更多数据的函数
   const loadData = useCallback(async (pageNo: number) => {
          const moreData = await getTabelData(getFilterObj(dataTableHead,pageNo));
@@ -177,7 +133,7 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
           loadData={loadData}
           currentPage={currentPage}
           pageSize={pageSize}
-            tableContainerRef={tableContainerRef}
+          tableContainerRef={tableContainerRef}
         />
         }
       </div>

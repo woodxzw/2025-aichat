@@ -11,11 +11,12 @@ interface DataTableHeadItem {
   dataColumn?: { totalCount: number };
   min?: number | string;
   max?: number | string;
+  field?: string;
 }
 
 // 定义 totalField 的类型
 interface TotalField {
-  fields: { name: string }[];
+  fields: { name: string,field: string }[];
   totalFieldAmount: number;
 }
 
@@ -29,14 +30,14 @@ interface Data {
 interface SelColumnsProps {
   data: Data;
   onClose: () => void;
-  onSubmit: (params: { selColumns: string[] }) => void;
+  onSubmit: (params: { field_name: string[] }) => void;
   ref: RefObject<HTMLDivElement>;
 }
 
 // 自定义的 SelColumns 组件
 const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref }) => {
-  const [selColumns, setSelColumns] = useState<string[]>([]);
-  const [allColumns, setAllColumns] = useState<string[]>([]);
+  const [selColumns, setSelColumns] = useState<any[]>([]);
+  const [allColumns, setAllColumns] = useState<any[]>([]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -53,13 +54,22 @@ const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref })
 
   useEffect(() => {
     const { dataTableHead, totalField } = data || {};
-    setSelColumns(dataTableHead?.map((i) => i?.name) || []);
-    setAllColumns(totalField?.fields?.map((i) => i?.name) || []);
+    setSelColumns(
+      dataTableHead?.map((i) => ({
+        name: i?.name,
+        field: i?.field
+    })) || []);
+
+    setAllColumns(
+      totalField?.fields?.map((i) => ({
+        name: i?.name,
+        field: i?.field
+    })) || []);
   }, [data]);
 
   const handleSubmit = useCallback(() => {
     onSubmit({
-      selColumns,
+      field_name:selColumns.map(i=> i?.field),
     });
   }, [onSubmit, selColumns]);
 
@@ -91,16 +101,16 @@ const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref })
                 <input
                   type="checkbox"
                   className={s.custom_checkbox}
-                  checked={selColumns.includes(item)}
+                  checked={selColumns.some(col => col.name === item.name && col.field === item.field)}
                   onChange={() => {
-                    if (selColumns.includes(item)) {
-                      setSelColumns(selColumns.filter((i) => i !== item));
+                    if (selColumns.some(col => col.name === item.name && col.field === item.field)) {
+                      setSelColumns(selColumns.filter(col => !(col.name === item.name && col.field === item.field)));
                     } else {
                       setSelColumns([...selColumns, item]);
                     }
                   }}
                 />
-                <div>{item}</div>
+                <div>{item?.name}</div>
               </div>
             </div>
           );
