@@ -32,9 +32,10 @@ interface CompactProps {
   currentPage: number;
   setCurrentPage: (page: number) => void;
   setResult: (result: Result) => void;
+  selectedColumns: {name: string,field: string}[]
 }
 
-const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCurrentPage }) => {
+const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCurrentPage,selectedColumns }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [sortData, setSortData] = useState<any>(null);
   const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
@@ -85,7 +86,7 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
 
   // 加载更多数据的函数
   const loadData = useCallback(async (pageNo: number) => {
-         const moreData = await getTabelData(getFilterObj(dataTableHead,pageNo));
+         const moreData = await getTabelData(getFilterObj(dataTableHead,selectedColumns,pageNo));
          setCurrentPage(pageNo);
          setResult({
              ...result,
@@ -127,7 +128,7 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
             </tr>
           </tbody>
         </table>
-        {dataTable && dataTable?.rows?.length &&
+        {dataTable && dataTable?.rows &&
           <ScrollableTable
           initialData={dataTable?.rows}
           loadData={loadData}

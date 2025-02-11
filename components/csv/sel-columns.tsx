@@ -30,14 +30,19 @@ interface Data {
 interface SelColumnsProps {
   data: Data;
   onClose: () => void;
-  onSubmit: (params: { field_name: string[] }) => void;
+  onSubmit: (columns:{ name: string,field: string }[]) => void;
+  selectedColumns: { name: string,field: string }[];
   ref: RefObject<HTMLDivElement>;
 }
 
 // 自定义的 SelColumns 组件
-const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref }) => {
-  const [selColumns, setSelColumns] = useState<any[]>([]);
-  const [allColumns, setAllColumns] = useState<any[]>([]);
+const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref,selectedColumns }) => {
+  const [selColumns, setSelColumns] = useState<{ name: string,field: string }[]>([]);
+  const [allColumns, setAllColumns] = useState<{ name: string,field: string }[]>([]);
+
+  useEffect(()=>{
+    setSelColumns(selectedColumns)
+  },[selectedColumns])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -54,11 +59,11 @@ const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref })
 
   useEffect(() => {
     const { dataTableHead, totalField } = data || {};
-    setSelColumns(
-      dataTableHead?.map((i) => ({
-        name: i?.name,
-        field: i?.field
-    })) || []);
+    // setSelColumns(
+    //   dataTableHead?.map((i) => ({
+    //     name: i?.name,
+    //     field: i?.field
+    // })) || []);
 
     setAllColumns(
       totalField?.fields?.map((i) => ({
@@ -68,9 +73,7 @@ const SelColumns: React.FC<SelColumnsProps> = ({ data, onClose, onSubmit, ref })
   }, [data]);
 
   const handleSubmit = useCallback(() => {
-    onSubmit({
-      field_name:selColumns.map(i=> i?.field),
-    });
+    onSubmit(selColumns);
   }, [onSubmit, selColumns]);
 
   return (

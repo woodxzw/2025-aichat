@@ -8,7 +8,7 @@ import Detail from './detail';
 import Compact from './compact';
 import s from './document-csv.module.css';
 import Column from './column';
-import { getCsvData, updateData } from "./api";
+import { getTabelData, updateData,getFilterObj } from "./api";
 import SelColumns from './sel-columns';
 const getActionText = (type: 'create' | 'update' | 'request-suggestions') => {
   switch (type) {
@@ -73,15 +73,24 @@ export function DocumentToolCsvResult({
   const [tableData,setTableData] = useState<any>(result)
   const [isLastData,setIsLastData] = useState(true);
   const [currentPage,setCurrentPage] = useState<number>(0)
+  const [selectedColumns, setSelectedColumns] = useState<{ name: string,field: string }[]>([]);
 
   // 接收到的数据
   useEffect(() => {
+    if(JSON.stringify('result') === '{}') return
     setTableData(result || {})
+    setSelectedColumns(
+      // result?.totalField?.fields?.slice(0, 10).map(i => ({
+      result?.totalField?.fields?.map(i => ({
+        name: i?.name,
+        field: i?.field
+      }))
+    )
   }, [result])
 
   const { totalField, dataTableHead } = useMemo(() => {
     // 判断数据是否完整
-    console.log(tableData?.progress?.cur,tableData?.progress?.max);
+    console.log(`out------>`,tableData);
     if(tableData?.progress?.cur < tableData?.progress?.max) {
       setIsLastData(false)
     }else{
@@ -119,20 +128,40 @@ export function DocumentToolCsvResult({
     setActiveTrigger(null);
   }, []);
 
+  
   const handeSubmit = useCallback((params: any) => {
     setIsOpen(false);
     setActiveTrigger(null);
-
-    relaodData(params)
+    const sortedArr = params?.sort((a, b) => {
+      const numA = parseInt(a?.field.split('_')[1], 10);
+      const numB = parseInt(b?.field.split('_')[1], 10);
+      return numA - numB;
+    });
+    setSelectedColumns(sortedArr)
+    relaodData(tableData,sortedArr)
     // getCsvData(params);
-  }, []);
-
-  const relaodData = async (params: any) => {
+  }, [tableData]);
+  
+  const relaodData = useCallback(async (tableData:any,params: any) => {
     setCurrentPage(0);
     console.log(params);
-    // const res = await getCsvData(params)
-    // setTableData(res)
-  }
+    const res = await getTabelData(getFilterObj([],params,0))
+    console.log(`relaodData----------->`,tableData);
+    setTableData({
+      ...tableData,
+      dataTableHead: tableData.dataTableHead?.map(item=>(
+        {
+          ...item,
+          filter: [0, 0],
+          sort: '',
+          selEnums: ''
+        }
+      )),
+      dataTable: {
+          rows:res.rows
+      }
+    })
+  },[])
 
   // 计算弹框的位置
   const positionDropdown = useCallback(() => {
@@ -162,7 +191,7 @@ export function DocumentToolCsvResult({
       <div className={`flex justify-between ${s.border_bottom_1} pl-3`}>
         <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className='flex items-center cursor-pointer relative' onClick={(event) => { handleTriggerClick(event, tableData) }}>
-          <div className="mr-3">{dataTableHead?.length} of {totalField?.totalFieldAmount} colums</div>
+          <div className="mr-3">{selectedColumns?.length} of {totalField?.totalFieldAmount} colums</div>
           <ChevronDownIcon />
           
         </div>
@@ -172,11 +201,11 @@ export function DocumentToolCsvResult({
       {/* 表格数据展示 */}
       <div className="tab-content">
         {activeTab === 'Detail' && (
-          <Detail result={tableData} currentPage={currentPage} setCurrentPage={setCurrentPage} setResult={setTableData} />
+          <Detail result={tableData} selectedColumns={selectedColumns} currentPage={currentPage} setCurrentPage={setCurrentPage} setResult={setTableData} />
         )}
 
         {activeTab === 'Compact' && (
-          <Compact result={tableData} currentPage={currentPage} setCurrentPage={setCurrentPage} setResult={setTableData} />
+          <Compact result={tableData} selectedColumns={selectedColumns} currentPage={currentPage} setCurrentPage={setCurrentPage} setResult={setTableData} />
         )}
 
         {activeTab === 'Column' && (
@@ -186,6 +215,7 @@ export function DocumentToolCsvResult({
       {isOpen && (
             <SelColumns
               data={columnsData}
+              selectedColumns={selectedColumns}
               onClose={handleClose}
               onSubmit={handeSubmit}
               ref={dropdownRef}

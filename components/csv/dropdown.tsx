@@ -130,8 +130,8 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
         )}
         {type === 'bool' && (
           <div className='w-full flex items-center'>
-            <button className={`${s.sort_btn_bool} ${selEnums === 'true' && 'bg-slate-500'}`} onClick={handleEnumSelect('true')}>TRUE</button>
-            <button className={`${s.sort_btn_bool} ${selEnums === 'false' && 'bg-slate-500'}`} onClick={handleEnumSelect('false')}>FALSE</button>
+            <button className={`${s.sort_btn_bool} ${selEnums === 'true' || selEnum === 'true' && 'bg-slate-500'}`} onClick={handleEnumSelect('true')}>TRUE</button>
+            <button className={`${s.sort_btn_bool} ${selEnums === 'false' || selEnum === 'false' && 'bg-slate-500'}`} onClick={handleEnumSelect('false')}>FALSE</button>
           </div>
         )}
         
@@ -139,14 +139,14 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
           <div className='w-full flex items-start flex-col max-h-20 overflow-y-auto'>
             {selEnums ? (
             <div
-              className='cursor-pointer mb-1'
+              className='cursor-pointer mb-1 w-full'
             >
             {selEnums}
           </div>):
           enums?.map((item) => {
             return (
               <div
-                className='cursor-pointer mb-1'
+                className={`cursor-pointer w-full mb-1 ${selEnum === item?.key && 'bg-slate-500'}`}
                 onClick={handleEnumSelect(item?.key)}
                 key={item?.key}
               >

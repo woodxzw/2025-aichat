@@ -40,9 +40,10 @@ interface DetailProps {
     currentPage: number;
     setCurrentPage: (page: number) => void;
     setResult: (result: Result) => void;
+    selectedColumns: {name: string,field: string}[]
 }
 
-const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrentPage  }) => {
+const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrentPage,selectedColumns  }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [sortData, setSortData] = useState<any | null>(null);
     const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
@@ -99,7 +100,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
     //     dataTableHead: updatedDataTableHead
     // });
     setCurrentPage(0);
-    const tableData = await getTabelData(getFilterObj(updatedDataTableHead,0));
+    const tableData = await getTabelData(getFilterObj(updatedDataTableHead,selectedColumns,0));
     setResult({
         ...result,
         dataTableHead: updatedDataTableHead,
@@ -107,7 +108,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
             rows: tableData.rows
         }
     });
-    }, [dataTableHead]);
+    }, [dataTableHead,selectedColumns]);
 
     // 计算弹框的位置
     const positionDropdown = useCallback(() => {
@@ -134,7 +135,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
     // 加载更多数据的函数
 
     const loadData = useCallback(async (pageNo: number) => {
-        const moreData = await getTabelData(getFilterObj(dataTableHead,pageNo));
+        const moreData = await getTabelData(getFilterObj(dataTableHead,selectedColumns,pageNo));
         setCurrentPage(pageNo);
         setResult({
             ...result,
@@ -147,7 +148,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
         })
         return moreData
     
-      }, [result]);
+      }, [result,selectedColumns]);
 
     const formatDate = (timestamp:any)=>{
         const date = new Date(timestamp * 1000); // 将时间戳转换为毫秒
@@ -167,7 +168,9 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                 <table className="flex flex-nowrap">
                     <thead>
                     <tr className={s.c_tr}>
-                        {dataTableHead?.map((item:DataTableHeadItem) => {
+                        {dataTableHead?.filter((i:DataTableHeadItem) => 
+                                selectedColumns.some(selected => selected.name === i.name && selected.field === i.field)
+                            )?.map((item:DataTableHeadItem) => {
                             return (
                                 <td className={s.c_td} key={item?.index}>
                                     <div className="w-full">
@@ -194,7 +197,9 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                 <table className="flex flex-nowrap">
                     <thead>
                     <tr className={s.c_tr}>
-                        {dataTableHead?.map((item:any) => {
+                        {dataTableHead?.filter((i:DataTableHeadItem) => 
+                                selectedColumns.some(selected => selected.name === i.name && selected.field === i.field)
+                            )?.map((item:any) => {
                             const { type, group, enums, dataColumn, min, max,index } = item || {};
                             if (type === 'number') {
                                 return (
@@ -271,7 +276,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                     </tr>
                     </thead>
                 </table>
-                {dataTable && dataTable?.rows?.length &&
+                {dataTable && dataTable?.rows &&
                     <ScrollableTable
                         initialData={dataTable?.rows}
                         loadData={loadData}

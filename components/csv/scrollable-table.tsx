@@ -57,7 +57,7 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
 
     // 加载更多数据
     const loadMoreData = useCallback(async () => {
-        if(loading) return
+        if(loading || dataTableRows?.length === 0) return
         console.log(`loadMore...`);
         
         setLoading(true);
@@ -71,7 +71,7 @@ const ScrollableTable: React.FC<ScrollableTableProps> = ({ initialData, loadData
         } finally {
             setLoading(false);
         }
-    }, [currentPage, hasMore, loadData, pageSize]);
+    }, [currentPage, hasMore, loadData, pageSize,dataTableRows]);
 
     return (
         <>
