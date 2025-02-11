@@ -8,7 +8,7 @@ import ScrollableTable from './scrollable-table';
 interface DataTableHeadItem {
   name: string;
   description: string;
-  type: 'number' | 'enum' | 'bool' | 'date';
+  type: 'INT' | 'FLOAT' | 'BOOL' | 'DATE' | 'TEXT';
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: { totalCount: number };
@@ -112,10 +112,10 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
                   <div className="w-full">
                     <button className={s.c_t_button} onClick={(event) => handleTriggerClick(event, item)}>
                       <div className="flex items-center overflow-hidden">
-                        {item?.type === 'number' && <span className='mr-2'>#</span>}
-                        {item?.type === 'date' && <CalendarIcon className='mr-2' />}
-                        {item?.type === 'bool' && <CheckIcon className='mr-2' />}
-                        {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
+                        {(item?.type === 'FLOAT' || item?.type === 'INT')  && <span className='mr-2'>#</span>}
+                        {item?.type === 'DATE' && <CalendarIcon className='mr-2' />}
+                        {item?.type === 'BOOL' && <CheckIcon className='mr-2' />}
+                        {item?.type === 'TEXT' && <span className='mr-2 underline'>A</span>}
                         <span className={s.c_h_name}>{item?.name}</span>
                       </div>
                       <div>

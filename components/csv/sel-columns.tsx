@@ -5,7 +5,7 @@ import s from './document-csv.module.css';
 interface DataTableHeadItem {
   name: string;
   description: string;
-  type: 'number' | 'enum' | 'bool' | 'date';
+  type: 'INT' | 'FLOAT' | 'BOOL' | 'DATE' | 'TEXT';
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: { totalCount: number };

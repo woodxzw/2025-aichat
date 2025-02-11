@@ -53,19 +53,19 @@ const getFilterObj = (updatedDataTableHead,seledColumns,pageNo = 0) => {
 
 const getCsvData = async(params)=>{
     // TODO: csv sort & filter & enumerate
-    const response = await fetch(`${baseApi}/uploadCsvOk`, {
-        // mode: 'no-cors',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"url":"http://113.31.114.7:3080/Furniture.csv", "_t":"1730807070494"}),
-    })
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+    // const response = await fetch(`${baseApi}/uploadCsvOk`, {
+    //     // mode: 'no-cors',
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({"url":"http://113.31.114.7:3080/Furniture.csv", "_t":"1730807070494"}),
+    // })
+    // if (!response.ok) {
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    // }
   
-    const dataUpload = await response.json();
+    // const dataUpload = await response.json();
     
     const res = await fetch(`${baseApi}/getCsvHead`, {
         // mode: 'no-cors',

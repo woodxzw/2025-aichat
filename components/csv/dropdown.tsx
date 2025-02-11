@@ -5,7 +5,7 @@ import RangeSlider from './range-slider';
 
 // 定义 data 对象的类型
 interface Data {
-  type: 'number' | 'bool' | 'enum';
+  type: 'INT' | 'FLOAT' | 'BOOL' | 'DATE' | 'TEXT';
   sort?: string;
   filter?: [number, number];
   min?: any;
@@ -96,15 +96,15 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
       sort: selSort,
     };
 
-    if (type === 'number' && selFilter) {
+    if ((type === 'FLOAT' || type === 'INT') && selFilter) {
       obj['filter'] = selFilter;
     }
 
-    if (type === 'bool' && selEnum) {
+    if (type === 'BOOL' && selEnum) {
       obj['selEnums'] = selEnum;
     }
 
-    if (type === 'enum' && selEnum) {
+    if (type === 'TEXT' && selEnum) {
       obj['selEnums'] = selEnum;
     }
 
@@ -123,19 +123,19 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
           <ArrowDownIcon />
           <div className='ml-4'>Sort descending</div>
         </div>
-        {type === 'number' && (
+        {(type === 'FLOAT' || type === 'INT') && (
           <div className='w-full'>
             <RangeSlider min={min || 0} max={max || 100} value={filter || [min, max] || [0, 100]} onChange={handleRangeChange} />
           </div>
         )}
-        {type === 'bool' && (
+        {type === 'BOOL' && (
           <div className='w-full flex items-center'>
             <button className={`${s.sort_btn_bool} ${selEnums === 'true' || selEnum === 'true' && 'bg-slate-500'}`} onClick={handleEnumSelect('true')}>TRUE</button>
             <button className={`${s.sort_btn_bool} ${selEnums === 'false' || selEnum === 'false' && 'bg-slate-500'}`} onClick={handleEnumSelect('false')}>FALSE</button>
           </div>
         )}
         
-        {type === 'enum' && (
+        {type === 'TEXT' && (
           <div className='w-full flex items-start flex-col max-h-20 overflow-y-auto'>
             {selEnums ? (
             <div

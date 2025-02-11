@@ -9,7 +9,7 @@ import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icon
 interface DataTableHeadItem {
   name: string;
   description: string;
-  type: 'number' | 'enum' | 'bool' | 'date';
+  type: 'INT' | 'FLOAT' | 'BOOL' | 'DATE' | 'TEXT';
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: DataColumn;
@@ -72,8 +72,8 @@ const renderDateType = (index: number,  group: any | undefined, min: number | un
         <ChartBar data={group || []} />
     </div>
     <div className={`${s.c_chat_b} mt-1`}>
-      <span>{formatDate(min)}</span>
-      <span>{formatDate(max)}</span>
+      <span>{min}</span>
+      <span>{max}</span>
     </div>
   </td>
 )
@@ -278,10 +278,10 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
           return (
             <div className={`flex flex-col w-full pb-3 mb-3 ${s.c_colunm_item_wrap}`} key={index}>
               <div className="font-bold text-lg flex items-center">
-                {item?.type === 'number' && <span className='mr-2'>#</span>}
-                {item?.type === 'date' && <CalendarIcon className='mr-2' />}
-                {item?.type === 'bool' && <CheckIcon className='mr-2' />}
-                {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
+                {(item?.type === 'FLOAT' || item?.type === 'INT')  && <span className='mr-2'>#</span>}
+                {item?.type === 'DATE' && <CalendarIcon className='mr-2' />}
+                {item?.type === 'BOOL' && <CheckIcon className='mr-2' />}
+                {item?.type === 'TEXT' && <span className='mr-2 underline'>A</span>}
                 <div>{item?.name}</div>
               </div>
               <div className="mt-1">
@@ -291,10 +291,10 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
                 <table className="size-full">
                   <tbody>
                     <tr>
-                      {type === 'number' && renderNumberType(index, group, min, max)}
-                      {type === 'enum' && renderEnumType(index, enums)}
-                      {type === 'bool' && renderBoolType(index, enums, dataColumn)}
-                      {type === 'date' && renderDateType(index, group, min, max)}
+                      {(item?.type === 'FLOAT' || item?.type === 'INT') && renderNumberType(index, group, min, max)}
+                      {type === 'TEXT' && renderEnumType(index, enums)}
+                      {type === 'BOOL' && renderBoolType(index, enums, dataColumn)}
+                      {type === 'DATE' && renderDateType(index, group, min, max)}
                     </tr>
                   </tbody>
                   
@@ -330,10 +330,10 @@ const Column: React.FC<ColumnProps> = ({ result }) => {
                     <div className={`w-12 text-right ${s.c_color_gray}`}>{Math.round(((missingCount || 0) / (totalCount || 1)) * 100)}%</div>
                   </div>
 
-                  {type === 'number' && renderNumberCa(mean, staDeviation, minimumFinite, quantiles, maximumFinite)}
-                  {type === 'date' && renderDateCa(mean, staDeviation, minimumFinite, quantiles, maximumFinite)}
-                  {type === 'enum' && renderEnumCa(uniqueValueCount, mostCommonValue, totalCount, mostCommonValueCount)}
-                  {type === 'bool' && renderBoolCa(enums, totalCount)}
+                  {(item?.type === 'FLOAT' || item?.type === 'INT') && renderNumberCa(mean, staDeviation, minimumFinite, quantiles, maximumFinite)}
+                  {type === 'DATE' && renderDateCa(mean, staDeviation, minimumFinite, quantiles, maximumFinite)}
+                  {type === 'TEXT' && renderEnumCa(uniqueValueCount, mostCommonValue, totalCount, mostCommonValueCount)}
+                  {type === 'BOOL' && renderBoolCa(enums, totalCount)}
 
                 </div>
               </div>

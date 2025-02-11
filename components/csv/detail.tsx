@@ -11,7 +11,7 @@ import ScrollableTable from './scrollable-table';
 interface DataTableHeadItem {
     name: string;
     description: string;
-    type: 'number' | 'enum' | 'bool' | 'date';
+    type: 'INT' | 'FLOAT' | 'BOOL' | 'DATE' | 'TEXT';
     group?: number[];
     enums?: { key: string; value: number }[];
     dataColumn?: { totalCount: number };
@@ -176,10 +176,10 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                                     <div className="w-full">
                                         <button className={s.c_t_button} onClick={(event) => handleTriggerClick(event, item)}>
                                             <div className="flex items-center overflow-hidden">
-                                            {item?.type === 'number' && <span className='mr-2'>#</span>}
-                                                {item?.type === 'date' && <CalendarIcon className='mr-2' />}
-                                                {item?.type === 'bool' && <CheckIcon className='mr-2' />}
-                                                {item?.type === 'enum' && <span className='mr-2 underline'>A</span>}
+                                            {(item?.type === 'FLOAT' || item?.type === 'INT')  && <span className='mr-2'>#</span>}
+                                                {item?.type === 'DATE' && <CalendarIcon className='mr-2' />}
+                                                {item?.type === 'BOOL' && <CheckIcon className='mr-2' />}
+                                                {item?.type === 'TEXT' && <span className='mr-2 underline'>A</span>}
                                                 <span className={s.c_h_name}>{item?.name}</span>
                                             </div>
                                             <div>
@@ -201,7 +201,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                                 selectedColumns.some(selected => selected.name === i.name && selected.field === i.field)
                             )?.map((item:any) => {
                             const { type, group, enums, dataColumn, min, max,index } = item || {};
-                            if (type === 'number') {
+                            if ((item?.type === 'FLOAT' || item?.type === 'INT')) {
                                 return (
                                     <td className={s.c_td} key={index}>
                                         <div className={s.c_chat_bar_s}>
@@ -214,20 +214,20 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                                     </td>
                                 );
                             }
-                            if (type === 'date') {
+                            if (type === 'DATE') {
                                 return (
                                     <td className={`${s.c_td}`} key={index}>
                                         <div className={s.c_chat_bar_s}>
                                             <ChartBar data={group || []} />
                                         </div>
                                         <div className={`${s.c_chat_b} w-full flex justify-between`}>
-                                            <span>{formatDate(min)}</span>
-                                            <span>{formatDate(max)}</span>
+                                            <span>{min}</span>
+                                            <span>{max}</span>
                                         </div>
                                     </td>
                                 );
                             }
-                            if (type === 'enum') {
+                            if (type === 'TEXT') {
                                 const sortedEnums = enums?.slice().sort((a:any, b:any) => b.value - a.value) || [];
                                 const topTwoEnums = sortedEnums.slice(0, 2);
                                 const otherValue = sortedEnums.slice(2).reduce((acc:any, enmuItem:any) => acc + enmuItem.value, 0);
@@ -249,7 +249,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                                     </td>
                                 );
                             }
-                            if (type === 'bool') {
+                            if (type === 'BOOL') {
                                 return (
                                     <td className={`${s.c_td} flex items-center`} key={index}>
                                         <div className={s.c_chat_pie_s}>
