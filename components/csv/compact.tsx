@@ -1,4 +1,4 @@
-import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
 import s from './document-csv.module.css';
 import CustomDropdown from './dropdown';
@@ -70,19 +70,16 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
   const positionDropdown = useCallback(() => {
     if (isOpen && dropdownRef.current && activeTrigger) {
       const triggerRect = activeTrigger.getBoundingClientRect();
-      dropdownRef.current.style.top = `${triggerRect.top - 20}px`;
+      dropdownRef.current.style.top = `${triggerRect.top + 15}px`;
       dropdownRef.current.style.left = `${triggerRect.left}px`;
     }
   }, [isOpen, activeTrigger]);
 
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        positionDropdown();
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, activeTrigger]);
+  useLayoutEffect(() => {
+      if (activeTrigger) {
+          positionDropdown();
+      }
+  }, [positionDropdown, activeTrigger]);
 
   // 加载更多数据的函数
   const loadData = useCallback(async (pageNo: number) => {

@@ -138,10 +138,17 @@
     border: 1px solid rgb(189, 193, 198);
     border-radius: 4px;
     max-width: 260px;
-    position: absolute; 
+    position: fixed; 
     z-index: 100;
     padding: 15px 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: scale(0.9);
 }
+
+/* .dropdown.show {
+    opacity: 1;
+    transform: scale(1);
+} */
 
 .selColumns{
     width: 340px;

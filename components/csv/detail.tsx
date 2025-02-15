@@ -1,4 +1,4 @@
-import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, RefObject, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import ChartBar from './chart-bar';
 import ChartPie from './chart-pie';
 import { HamburgerMenuIcon, CalendarIcon, CheckIcon } from "@radix-ui/react-icons";
@@ -48,7 +48,6 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
     const [sortData, setSortData] = useState<any | null>(null);
     const [activeTrigger, setActiveTrigger] = useState<HTMLElement | null>(null);
     const dropdownRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-
 
     const tableContainerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -114,8 +113,9 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
     const positionDropdown = useCallback(() => {
         if (isOpen && dropdownRef.current && activeTrigger) {
             const triggerRect = activeTrigger.getBoundingClientRect();
+            console.log(triggerRect);
             if (triggerRect.top !== undefined && triggerRect.left !== undefined) {
-                dropdownRef.current.style.top = `${triggerRect.top - 20}px`;
+                dropdownRef.current.style.top = `${triggerRect.top + 20}px`;
                 dropdownRef.current.style.left = `${triggerRect.left}px`;
             } else {
                 console.warn('Invalid getBoundingClientRect values:', triggerRect);
@@ -123,14 +123,27 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
         }
     }, [isOpen, activeTrigger]);
 
-    useEffect(() => {
-        if (isOpen) {
-            const timer = setTimeout(() => {
-                positionDropdown();
-            }, 0);
-            return () => clearTimeout(timer);
+    // useEffect(() => {
+    //     if (activeTrigger) {
+    //         const timer = setTimeout(() => {
+    //             positionDropdown();
+    //         }, 0);
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [positionDropdown, activeTrigger]);
+
+    // useEffect(() => {
+    //     if (isOpen && !dropdownVisible) {
+    //         positionDropdown();
+    //         setDropdownVisible(true);
+    //     }
+    // }, [isOpen, dropdownVisible, positionDropdown]);
+
+    useLayoutEffect(() => {
+        if (activeTrigger) {
+            positionDropdown();
         }
-    }, [positionDropdown, isOpen]);
+    }, [positionDropdown, activeTrigger]);
 
     // 加载更多数据的函数
 
