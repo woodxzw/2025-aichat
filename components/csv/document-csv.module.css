@@ -2,7 +2,7 @@
     /* border-top: 1px solid rgb(218, 220, 224); */
     border-left: 1px solid rgb(218, 220, 224);
     margin: 0 auto;
-    max-height: 500px;
+    max-height: 300px;
 }
 .border_top_none{
     border-top: none;
