@@ -2,7 +2,7 @@
     /* border-top: 1px solid rgb(218, 220, 224); */
     border-left: 1px solid rgb(218, 220, 224);
     margin: 0 auto;
-    max-height: 500px;
+    max-height: 300px;
 }
 .border_top_none{
     border-top: none;
@@ -142,7 +142,6 @@
     z-index: 100;
     padding: 15px 0;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    transform: scale(0.9);
 }
 
 /* .dropdown.show {
@@ -157,9 +156,10 @@
     border: 1px solid rgb(189, 193, 198);
     border-radius: 4px;
     max-width: 340px;
-    position: absolute; 
+    position: fixed;
     z-index: 100;
     padding: 15px 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .sort_btn{

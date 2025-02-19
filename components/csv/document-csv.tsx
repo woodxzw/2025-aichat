@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, SetStateAction, useState, RefObject, useRef, useCallback, useEffect } from 'react';
+import React, { useMemo, SetStateAction, useState, RefObject, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import { UIBlock } from '../block';
 import { FileIcon, LoaderIcon, MessageIcon, PencilEditIcon } from '../icons';
 import { ChevronDownIcon } from "@radix-ui/react-icons"
@@ -167,23 +167,29 @@ export function DocumentToolCsvResult({
   const positionDropdown = useCallback(() => {
     if (isOpen && dropdownRef.current && activeTrigger) {
       const triggerRect = activeTrigger.getBoundingClientRect();
+      console.log(triggerRect);
       if (triggerRect.top !== undefined && triggerRect.left !== undefined) {
-        dropdownRef.current.style.top = `${triggerRect.bottom-10}px`;
-        dropdownRef.current.style.right = `0px`;
+        dropdownRef.current.style.top = `${triggerRect.top + 40}px`;
+        dropdownRef.current.style.left = `${triggerRect.left - 220}px`;
       } else {
         console.warn('Invalid getBoundingClientRect values:', triggerRect);
       }
     }
   }, [isOpen, activeTrigger]);
+  useLayoutEffect(() => {
+      if (activeTrigger) {
+          positionDropdown();
+      }
+  }, [positionDropdown, activeTrigger]);
 
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        positionDropdown();
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [positionDropdown, isOpen]);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     const timer = setTimeout(() => {
+  //       positionDropdown();
+  //     }, 0);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [positionDropdown, isOpen]);
 
   return (
     <div className="container relative m-auto">
