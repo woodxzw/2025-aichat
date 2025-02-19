@@ -137,12 +137,13 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
         
         {type === 'TEXT' && (
           <div className='w-full flex items-start flex-col max-h-20 overflow-y-auto'>
-            {selEnums ? (
-            <div
-              className='cursor-pointer mb-1 w-full'
-            >
-            {selEnums}
-          </div>):
+            {
+          //   selEnums ? (
+          //   <div
+          //     className='cursor-pointer mb-1 w-full'
+          //   >
+          //   {selEnums}
+          // </div>):
           enums?.map((item) => {
             return (
               <div
