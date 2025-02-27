@@ -72,7 +72,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
 
     const handleClear = useCallback(async (params: any) => {
         handeSubmit(params)
-    }, []);
+    }, [dataTableHead,selectedColumns]);
     
 
     const handeSubmit = useCallback(async (params: any) => {

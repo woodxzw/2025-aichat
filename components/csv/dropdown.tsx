@@ -169,7 +169,6 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onClear,
               value={inputValue} 
               onChange={(e) => {
                 setInputValue(e.target.value);
-                setSelEnum(e.target.value); // 如果需要将输入框的值直接赋给 selEnums
               }} 
               className='w-full border-2 p-2 mt-2 mb-2 pr-8' // 增加 pr-8 以留出图标空间
               style={{borderRadius:'20px', borderColor:'#ccc'}}

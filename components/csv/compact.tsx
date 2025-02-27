@@ -67,7 +67,7 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
 
   const handleClear = useCallback(async (params: any) => {
       handeSubmit(params)
-  }, []);
+  }, [dataTableHead,selectedColumns]);
 
   const handeSubmit = useCallback(async (params: any) => {
           setIsOpen(false);
