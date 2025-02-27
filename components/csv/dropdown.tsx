@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect, useCallback, RefObject, useMemo } f
 import s from './document-csv.module.css';
 import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import RangeSlider from './range-slider';
-import { deleteChatById } from '@/lib/db/queries';
-import { del } from '@vercel/blob';
 
 // 定义 data 对象的类型
 interface Data {
