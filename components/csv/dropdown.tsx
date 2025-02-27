@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback, RefObject, useMemo } from 'react';
 import s from './document-csv.module.css';
-import { ArrowUpIcon, ArrowDownIcon } from "@radix-ui/react-icons";
+import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import RangeSlider from './range-slider';
+import { deleteChatById } from '@/lib/db/queries';
+import { del } from '@vercel/blob';
 
 // 定义 data 对象的类型
 interface Data {
@@ -21,12 +23,13 @@ interface Data {
 interface CustomDropdownProps {
   data: Data;
   onClose: () => void;
+  onClear: (params: any) => void;
   onSubmit: (params: any) => void;
   ref: RefObject<HTMLDivElement>;
 }
 
 // 自定义的 Dropdown 组件
-const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit, ref }) => {
+const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onClear, onSubmit, ref }) => {
   const [selFilter, setSelFilter] = useState<[number, number]>([0, 0]);
   const [selEnum, setSelEnum] = useState<string | null>('');
   const [selSort, setSelSort] = useState<string | null>('');
@@ -85,6 +88,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
     (key: string) => () => {
       if (selEnum !== key) {
         setSelEnum(key);
+        setInputValue(key)
       }
     },
     [selEnum]
@@ -112,6 +116,31 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
     onSubmit(obj);
   }, [name, type, selSort, selFilter, selEnum, onSubmit, filter]);
 
+
+  const handleClear = useCallback(() => {
+    let obj: any = {
+      ...data,
+    };
+
+    delete obj['filter'];
+    delete obj['sort'];
+    delete obj['selEnums'];
+    onClear(obj);
+  }, [name, type, selSort, selFilter, selEnum, onClear, filter]);
+
+
+  const [inputValue, setInputValue] = useState<string>('');
+
+  useEffect(() => {
+    setInputValue(selEnums || '');
+  }, [selEnums]);
+
+  const filteredEnums = useMemo(() => {
+    if (!enums) return [];
+    if (inputValue.trim() === '') return enums; 
+    return enums.filter(item => item.key.toLowerCase().includes(inputValue.toLowerCase()));
+  }, [enums, inputValue]);
+
   return (
     <div ref={ref} className={`${s.dropdown} ${s.fs12}`}>
       <div className='flex-1 flex flex-col px-4'>
@@ -136,6 +165,21 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
         )}
         
         {type === 'TEXT' && (
+          <>
+          <div className='relative w-full'>
+            <input 
+              value={inputValue} 
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                setSelEnum(e.target.value); // 如果需要将输入框的值直接赋给 selEnums
+              }} 
+              className='w-full border-2 p-2 mt-2 mb-2 pr-8' // 增加 pr-8 以留出图标空间
+              style={{borderRadius:'20px', borderColor:'#ccc'}}
+            />
+            <div className='absolute inset-y-0 right-0 flex items-center pr-3'>
+              <MagnifyingGlassIcon className='text-gray-500' />
+            </div>
+          </div>
           <div className='w-full flex items-start flex-col max-h-20 overflow-y-auto'>
             {
           //   selEnums ? (
@@ -144,7 +188,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
           //   >
           //   {selEnums}
           // </div>):
-          enums?.map((item) => {
+          filteredEnums?.map((item) => {
             return (
               <div
                 className={`cursor-pointer w-full mb-1 ${selEnum === item?.key && 'bg-slate-500'}`}
@@ -157,10 +201,11 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ data, onClose, onSubmit
           })}
             
           </div>
+          </>
         )}
       </div>
       <div className='flex-1 flex px-4 justify-end mt-3'>
-        <button onClick={onClose} className={`${s.sort_btn} ${s.cancel}`}>
+        <button onClick={handleClear} className={`${s.sort_btn} ${s.cancel}`}>
           Cancel
         </button>
         <button onClick={handleSubmit} className={`${s.sort_btn} ${s.apply}`}>

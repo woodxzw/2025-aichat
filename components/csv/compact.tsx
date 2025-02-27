@@ -12,8 +12,13 @@ interface DataTableHeadItem {
   group?: number[];
   enums?: { key: string; value: number }[];
   dataColumn?: { totalCount: number };
-  min?: number | string;
-  max?: number | string;
+  min?: number;
+  max?: number;
+  index?: number;
+  filter?: [number, number];
+  selEnums?: string;
+  sort?: string;
+  field?: string;
 }
 
 // 定义 dataTable 的类型
@@ -60,11 +65,45 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
     setActiveTrigger(null);
   }, []);
 
-  const handeSubmit = useCallback((params: any) => {
-    setIsOpen(false);
-    setActiveTrigger(null);
-    getCsvData(params);
+  const handleClear = useCallback(async (params: any) => {
+      handeSubmit(params)
   }, []);
+
+  const handeSubmit = useCallback(async (params: any) => {
+          setIsOpen(false);
+          setActiveTrigger(null);
+          console.log(params,dataTableHead);
+          const updatedDataTableHead = dataTableHead.map((item) => {
+              if (item?.index === params.index) {
+                  return {
+                      ...params
+                  };
+              }
+              // 处理 sort 字段
+              if (params.sort && item.sort) {
+                  return {
+                      ...item,
+                      sort: ''
+                  };
+              }
+              return item;
+          });
+  
+      
+      // setResult({
+      //     ...result,
+      //     dataTableHead: updatedDataTableHead
+      // });
+      setCurrentPage(0);
+      const tableData = await getTabelData(getFilterObj(updatedDataTableHead,selectedColumns,0));
+      setResult({
+          ...result,
+          dataTableHead: updatedDataTableHead,
+          dataTable: {
+              rows: tableData.rows
+          }
+      });
+      }, [dataTableHead,selectedColumns]);
 
   // 计算弹框的位置
   const positionDropdown = useCallback(() => {
@@ -141,6 +180,7 @@ const Compact: React.FC<CompactProps> = ({ result, setResult, currentPage, setCu
           onClose={handleClose}
           onSubmit={handeSubmit}
           ref={dropdownRef}
+          onClear={handleClear}
         />
       )}
     </div>

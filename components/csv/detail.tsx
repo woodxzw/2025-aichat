@@ -70,16 +70,18 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
     }, []);
 
 
+    const handleClear = useCallback(async (params: any) => {
+        handeSubmit(params)
+    }, []);
     
 
     const handeSubmit = useCallback(async (params: any) => {
         setIsOpen(false);
         setActiveTrigger(null);
-        console.log(params);
+        console.log(params,dataTableHead);
         const updatedDataTableHead = dataTableHead.map((item) => {
             if (item?.index === params.index) {
                 return {
-                    ...item,
                     ...params
                 };
             }
@@ -305,6 +307,7 @@ const Detail: React.FC<DetailProps> = ({ result,setResult,currentPage,setCurrent
                     onClose={handleClose}
                     onSubmit={handeSubmit}
                     ref={dropdownRef}
+                    onClear={handleClear}
                 />
             )}
         </div>
